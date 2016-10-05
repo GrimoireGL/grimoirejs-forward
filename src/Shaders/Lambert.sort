@@ -15,7 +15,8 @@ varying vec3 vPosition;
   void main(){
     gl_Position = _matPVM * vec4(position,1.0);
     vNormal = (_matM * vec4(normal,0.0)).xyz;
-    vPosition = (_matM * vec4(position,1.0)).xyz;
+    vec4 posBase = (_matM * vec4(position,1.0));
+    vPosition = posBase.xyz / posBase.w;
     vUV = uv;
   }
 }
@@ -24,6 +25,8 @@ varying vec3 vPosition;
   uniform vec3 _cameraPosition;
   uniform vec3 _dLightDir[5];
   uniform vec3 _dLightColor[5];
+
+  uniform sampler2D texture;
 
   @{default:"white",type:"color"}
   uniform vec4 diffuse;
@@ -53,8 +56,9 @@ varying vec3 vPosition;
   void main(){
     vec4 lastColor = vec4(0,0,0,diffuse.a);
     for(int i = 0; i < 5;i++){
-      vec3 lColor = lambert(_dLightDir[i],vNormal) * _dLightColor[i] * diffuse.rgb + blinnPhong(_dLightDir[i],normalize(_cameraPosition - vPosition),vNormal,specularPower) * specular * length(_dLightDir[i]);
-      lastColor.rgb += lColor;
+      vec3 dColor = diffuse.rgb * texture2D(texture,vUV).rgb;
+      vec3 lColor = lambert(_dLightDir[i],vNormal) * dColor + blinnPhong(_dLightDir[i],normalize(_cameraPosition - vPosition),vNormal,specularPower) * specular * length(_dLightDir[i]);
+      lastColor.rgb += lColor * _dLightColor[i] ;
     }
     gl_FragColor = lastColor;
   }

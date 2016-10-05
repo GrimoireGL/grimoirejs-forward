@@ -6,8 +6,8 @@
         <MouseCameraControl/>
       </camera.components>
     </camera>
-    <light rotation="y(130d)" color="white"/>
+    <light rotation="y(130d)" type="directional" color="white"/>
     <!-- <light rotation="y(70d)" color="cyan"/> -->
-    <mesh geometry="sphere" material="new(lambert)" specular="yellow"/>
+    <mesh geometry="sphere" material="new(lambert)" specular="yellow" texture="../grid.jpg"/>
   </scene>
 </goml>
