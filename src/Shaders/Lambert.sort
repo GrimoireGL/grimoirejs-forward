@@ -1,0 +1,61 @@
+@Pass
+
+varying vec3 vNormal;
+varying vec2 vUV;
+varying vec3 vPosition;
+
+@vert{
+  attribute vec3 position;
+  attribute vec3 normal;
+  attribute vec2 uv;
+
+  uniform mat4 _matPVM;
+  uniform mat4 _matM;
+
+  void main(){
+    gl_Position = _matPVM * vec4(position,1.0);
+    vNormal = (_matM * vec4(normal,0.0)).xyz;
+    vPosition = (_matM * vec4(position,1.0)).xyz;
+    vUV = uv;
+  }
+}
+
+@frag{
+  uniform vec3 _cameraPosition;
+  uniform vec3 _dLightDir[5];
+  uniform vec3 _dLightColor[5];
+
+  @{default:"white",type:"color"}
+  uniform vec4 diffuse;
+
+  @{default:"gray",type:"color"}
+  uniform vec3 specular;
+
+  @{default:100.0}
+  uniform float specularPower;
+
+  float lambert(
+    vec3 lightDirection,
+    vec3 surfaceNormal) {
+    return max(0.0, dot(lightDirection, surfaceNormal));
+  }
+
+  float blinnPhong(
+  vec3 lightDirection,
+  vec3 viewDirection,
+  vec3 surfaceNormal,
+  float shininess) {
+  //Calculate Blinn-Phong power
+  vec3 H = normalize(viewDirection + lightDirection);
+  return pow(max(0.0, dot(surfaceNormal, H)), shininess);
+}
+
+  void main(){
+    vec4 lastColor = vec4(0,0,0,diffuse.a);
+    for(int i = 0; i < 5;i++){
+      vec3 lColor = lambert(_dLightDir[i],vNormal) * _dLightColor[i] * diffuse.rgb + blinnPhong(_dLightDir[i],normalize(_cameraPosition - vPosition),vNormal,specularPower) * specular * length(_dLightDir[i]);
+      lastColor.rgb += lColor;
+    }
+    gl_FragColor = lastColor;
+  }
+}

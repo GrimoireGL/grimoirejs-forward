@@ -1,0 +1,13 @@
+<goml width="512" height="512">
+  <geometry type="sphere" name="sphere" divHorizontal="30" divVertical="30"/>
+  <scene>
+    <camera position="0,0,10">
+      <camera.components>
+        <MouseCameraControl/>
+      </camera.components>
+    </camera>
+    <light rotation="y(130d)" color="white"/>
+    <!-- <light rotation="y(70d)" color="cyan"/> -->
+    <mesh geometry="sphere" material="new(lambert)" specular="yellow"/>
+  </scene>
+</goml>

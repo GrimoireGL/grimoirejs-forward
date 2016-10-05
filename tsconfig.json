@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "noImplicitAny": true
+  },
+  "filesGlob": [
+    "./src/**/*.ts"
+  ],
+  "files": [
+    "./src/Components/DirectionalLightTypeComponent.ts",
+    "./src/Components/LightComponent.ts",
+    "./src/Components/RenderForwardComponent.ts",
+    "./src/index.ts",
+    "./src/Objects/SceneLightInfoContainer.ts",
+    "./src/Shaders/Lambert.sort.d.ts",
+    "./src/Util/LightVariableRegister.ts"
+  ],
+  "exclude": [],
+  "atom": {
+    "rewriteTsconfig": true
+  }
+}
