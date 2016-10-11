@@ -10,9 +10,15 @@
   "files": [
     "./src/Components/DirectionalLightTypeComponent.ts",
     "./src/Components/LightComponent.ts",
+    "./src/Components/LightTypeComponentBase.ts",
     "./src/Components/RenderForwardComponent.ts",
     "./src/index.ts",
-    "./src/Objects/SceneLightInfoContainer.ts",
+    "./src/Objects/IDirectionalLightInfo.ts",
+    "./src/Objects/ILightInfo.ts",
+    "./src/Objects/IPointLightInfo.ts",
+    "./src/Objects/ISpotLightInfo.ts",
+    "./src/Objects/LightInfoSceneDesc.ts",
+    "./src/Objects/LightsInfoDesc.ts",
     "./src/Shaders/Lambert.sort.d.ts",
     "./src/Util/LightVariableRegister.ts"
   ],

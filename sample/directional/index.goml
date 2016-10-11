@@ -1,7 +1,7 @@
 <goml width="512" height="512">
   <geometry type="sphere" name="sphere" divHorizontal="30" divVertical="30"/>
   <scene>
-    <camera position="0,0,10">
+    <camera position="0,0,10" aspect="1">
       <camera.components>
         <MouseCameraControl/>
       </camera.components>

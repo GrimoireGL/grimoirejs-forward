@@ -1,4 +1,4 @@
-import SceneLightInfoContainer from "../Objects/SceneLightInfoContainer";
+import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import UniformProxy from "grimoirejs-fundamental/lib/Resource/UniformProxy";
 import EnvUniformValueResolver from "grimoirejs-fundamental/lib/Material/EnvUniformValueResolver";
 export default class LightVariableRegister {
@@ -7,7 +7,7 @@ export default class LightVariableRegister {
     this._registerLightVariable("_dLightColor", (n, p, i) => p.uniformVector3Array(n, i.lights.diretctional.colors));
   }
 
-  private static _registerLightVariable(valName: string, register: (name: string, proxy: UniformProxy, info: SceneLightInfoContainer) => void): void {
-    EnvUniformValueResolver.addResolver(valName, (valInfo) => (proxy, args) => register(valName, proxy, args.sceneDescription as SceneLightInfoContainer));
+  private static _registerLightVariable(valName: string, register: (name: string, proxy: UniformProxy, info: LightInfoSceneDesc) => void): void {
+    EnvUniformValueResolver.addResolver(valName, (valInfo) => (proxy, args) => register(valName, proxy, args.sceneDescription as LightInfoSceneDesc));
   }
 }

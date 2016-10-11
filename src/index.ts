@@ -1,4 +1,3 @@
-import SceneLightInfoContainer from "./Objects/SceneLightInfoContainer";
 // Please do not change the name of variable on the line below.
 import GrimoireInterface from "grimoirejs";
 import GLExtRequestor from "grimoirejs-fundamental/lib/Resource/GLExtRequestor";

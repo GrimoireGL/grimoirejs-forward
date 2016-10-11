@@ -7,7 +7,7 @@ Describe about this package here.
 # installation
 
 ```bash
-  npm install grimoirejs-forward --save
+  npm install grimoirejs-forward-shading --save
 ```
 
 # LICENSE

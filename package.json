@@ -7,7 +7,7 @@
     "test": "inquisitor",
     "start": "cauldron build --watch --server",
     "build": "cauldron build",
-    "prepublish": "cauldron build && inquisitor && npm run doc",
+    "prepublish": "cauldron build --babelSeparated && inquisitor && npm run doc",
     "doc": "cauldron doc",
     "scaffold": "cauldron scaffold"
   },
@@ -62,11 +62,11 @@
     }
   },
   "devDependencies": {
-    "grimoirejs-cauldron": "^1.5.6",
+    "grimoirejs-cauldron": "^1.5.7",
     "grimoirejs-inquisitor": "^1.0.3"
   },
   "dependencies": {
-    "grimoirejs-fundamental": "^0.3.9",
+    "grimoirejs-fundamental": "^0.3.11",
     "grimoirejs-math": "^1.2.4"
   }
 }
