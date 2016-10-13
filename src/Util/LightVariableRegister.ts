@@ -5,6 +5,9 @@ export default class LightVariableRegister {
   public static registerAll(): void {
     this._registerLightVariable("_dLightDir", (n, p, i) => p.uniformVector3Array(n, i.lights.diretctional.directions));
     this._registerLightVariable("_dLightColor", (n, p, i) => p.uniformVector3Array(n, i.lights.diretctional.colors));
+    this._registerLightVariable("_pLightPosition", (n, p, i) => p.uniformVector3Array(n, i.lights.point.positions));
+    this._registerLightVariable("_pLightColor", (n, p, i) => p.uniformVector3Array(n, i.lights.point.colors));
+    this._registerLightVariable("_pLightParam", (n, p, i) => p.uniformVector2Array(n, i.lights.point.params));
   }
 
   private static _registerLightVariable(valName: string, register: (name: string, proxy: UniformProxy, info: LightInfoSceneDesc) => void): void {

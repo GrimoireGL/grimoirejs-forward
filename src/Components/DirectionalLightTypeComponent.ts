@@ -14,12 +14,14 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
 
   private _color: Color3;
 
+
   private _transform: TransformComponent;
 
   public $awake(): void {
     this.getAttribute("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
   }
+
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
     this.__ensureLightTypeContainer(sceneDesc);

@@ -39,6 +39,9 @@ export default class LightComponent extends Component {
       case "directional":
         this.node.addComponent("DirectionalLightType", true);
         break;
+      case "point":
+        this.node.addComponent("PointLightType", true);
+        break;
     }
   }
 }
