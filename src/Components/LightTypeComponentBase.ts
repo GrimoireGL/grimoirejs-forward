@@ -38,7 +38,7 @@ export default class LightTypeComponentBase extends Component {
         indicies: [] as string[],
         positions: [] as number[],
         directions: [] as number[],
-        color: [] as number[],
+        colors: [] as number[],
         params: [] as number[]
       }
     } as LightsInfoDesc;

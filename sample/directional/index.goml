@@ -9,7 +9,10 @@
       </camera.components>
     </camera>
     <light rotation="-30d,180d,0d" type="directional" color="gray"/>
-    <light rotation="-30d,180d,0d" type="point" color="blue" position="-3,0.1,0"/>
+    <light rotation="-30d,180d,0d" type="point" color="blue" position="-3,0.1,0" distance="10" decay="0.3"/>
+    <light rotation="-30d,180d,0d" type="point" color="green" position="-3,0.1,-2" distance="10" decay="0.3"/>
+    <light rotation="-30d,180d,0d" type="point" color="yellow" position="-3,0.1,2" distance="10" decay="0.3"/>
+
     <!-- <light rotation="y(70d)" color="cyan"/> -->
     <mesh geometry="sphere" material="#cubeMaterial"/>
     <mesh geometry="quad" material="#cubeMaterial" scale="10" rotation="x(-90d)"/>

@@ -28,6 +28,10 @@ varying vec3 vPosition;
   uniform vec3 _pLightPosition[5];
   uniform vec3 _pLightColor[5];
   uniform vec2 _pLightParam[5];
+  uniform vec3 _sLightPosition[5];
+  uniform vec3 _sLightDir[5];
+  uniform vec3 _sLightColor[5];
+  uniform vec3 _sLightParam[5];
 
   uniform sampler2D texture;
 
@@ -72,11 +76,20 @@ varying vec3 vPosition;
     return result;
   }
 
+  vec3 spotLight(vec3 dBaseColor){
+    vec3 result = vec3(0);
+    for(int i = 0; i < 5; i++){
+      vec3 l2p = _sLightPosition[i] - vPosition;
+    }
+    return result;
+  }
+
   void main(){
     vec4 lastColor = vec4(0,0,0,diffuse.a);
     vec3 dColor = diffuse.rgb * texture2D(texture,vUV).rgb;
     lastColor.rgb += directionalLight(dColor);
     lastColor.rgb += pointLight(dColor);
+    lastColor.rgb += spotLight(dColor);
     gl_FragColor = lastColor;
   }
 }

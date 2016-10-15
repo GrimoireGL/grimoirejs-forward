@@ -42,6 +42,9 @@ export default class LightComponent extends Component {
       case "point":
         this.node.addComponent("PointLightType", true);
         break;
+      case "spot":
+        this.node.addComponent("SpotLightType", true);
+        break;
     }
   }
 }
