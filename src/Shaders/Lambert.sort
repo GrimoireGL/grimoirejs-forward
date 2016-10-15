@@ -79,7 +79,29 @@ varying vec3 vPosition;
   vec3 spotLight(vec3 dBaseColor){
     vec3 result = vec3(0);
     for(int i = 0; i < 5; i++){
-      vec3 l2p = _sLightPosition[i] - vPosition;
+      float innerConeAngle = _sLightParam[i].x;
+      float outerConeAngle = _sLightParam[i].y;
+      float outCos=cos(outerConeAngle);
+      float innCos=cos(innerConeAngle);
+
+      vec3 l2p = vPosition-_sLightPosition[i];
+      float d = length(l2p);
+      l2p=l2p/d;
+      float c = dot(l2p,normalize(_sLightDir[i]));
+
+      float decay = _sLightParam[i].z;//減衰係数
+      decay = 1.;
+      float distanceDecay = decay;
+      float angleDecay = decay;
+      //
+      float outerDistance = 10.0;
+      float innerDistance = 0.1;
+      //
+      float distDecayCoefficient = pow(clamp((outerDistance-d)/(outerDistance-innerDistance),0.0,1.0),distanceDecay);
+      float angleDecayCoefficient = pow(clamp((c-outCos)/(innCos-outCos),0.0,1.0),angleDecay);
+      //
+      vec3 lColor = lambert(-1.0*l2p,vNormal) * dBaseColor + blinnPhongSp(l2p,normalize(_cameraPosition - vPosition),vNormal,specularPower) * specular;
+      result += lColor*_sLightColor[i]*angleDecayCoefficient*distDecayCoefficient;
     }
     return result;
   }

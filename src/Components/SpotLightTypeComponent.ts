@@ -11,11 +11,11 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
       defaultValue: "white"
     },
     innerCone: {
-      converter: "Angle",
+      converter: "Angle2D",
       defaultValue: "5d"
     },
     outerCone: {
-      converter: "Angle",
+      converter: "Angle2D",
       defaultValue: "20d"
     },
     decay: {
