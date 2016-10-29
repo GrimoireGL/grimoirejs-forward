@@ -9,6 +9,7 @@
   ],
   "files": [
     "./src/Components/DirectionalLightTypeComponent.ts",
+    "./src/Components/ForwardShadingManagerComponent.ts",
     "./src/Components/LightComponent.ts",
     "./src/Components/LightTypeComponentBase.ts",
     "./src/Components/PointLightTypeComponent.ts",
@@ -21,7 +22,8 @@
     "./src/Objects/ISpotLightInfo.ts",
     "./src/Objects/LightInfoSceneDesc.ts",
     "./src/Objects/LightsInfoDesc.ts",
-    "./src/Shaders/Lambert.sort.d.ts",
+    "./src/Shaders/Basic.sort.d.ts",
+    "./src/Shaders/ShadingChunk.sort.d.ts",
     "./src/Util/LightVariableRegister.ts"
   ],
   "exclude": [],

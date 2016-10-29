@@ -1,6 +1,11 @@
+import MaterialFactory from "grimoirejs-fundamental/lib/Material/MaterialFactory";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import UniformProxy from "grimoirejs-fundamental/lib/Resource/UniformProxy";
+import ImportResolver from "grimoirejs-fundamental/lib/Material/ImportResolver";
 import EnvUniformValueResolver from "grimoirejs-fundamental/lib/Material/EnvUniformValueResolver";
+import ShadingChunk from "../Shaders/ShadingChunk.sort";
+import Basic from "../Shaders/Basic.sort";
+
 export default class LightVariableRegister {
   public static registerAll(): void {
     this._registerLightVariable("_dLightDir", (n, p, i) => p.uniformVector3Array(n, i.lights.diretctional.directions));
@@ -12,7 +17,8 @@ export default class LightVariableRegister {
     this._registerLightVariable("_sLightColor", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.colors));
     this._registerLightVariable("_sLightDir", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.directions));
     this._registerLightVariable("_sLightParam", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.params));
-
+    ImportResolver.staticImports["forward-shading"] = ShadingChunk;
+    MaterialFactory.addSORTMaterial("forward", Basic);
   }
 
   private static _registerLightVariable(valName: string, register: (name: string, proxy: UniformProxy, info: LightInfoSceneDesc) => void): void {

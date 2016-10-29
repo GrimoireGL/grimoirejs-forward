@@ -1,0 +1,103 @@
+#define USE_DIR_LIGHT
+#if DIR_LIGHT_COUNT > 0
+  #define USE_DIR_LIGHT
+#endif
+#if POINT_LIGHT_COUNT > 0
+  #define USE_POINT_LIGHT
+#endif
+#if SPOT_LIGHT_COUNT > 0
+  #define USE_SPOT_LIGHT
+#endif
+
+#ifdef USE_DIR_LIGHT
+  uniform vec3 _dLightDir[DIR_LIGHT_COUNT];
+  uniform vec3 _dLightColor[DIR_LIGHT_COUNT];
+#endif
+#ifdef USE_POINT_LIGHT
+  uniform vec3 _pLightPosition[POINT_LIGHT_COUNT];
+  uniform vec3 _pLightColor[POINT_LIGHT_COUNT];
+  uniform vec2 _pLightParam[POINT_LIGHT_COUNT];
+#endif
+#ifdef USE_SPOT_LIGHT
+  uniform vec3 _sLightPosition[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightDir[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightColor[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightParam[POINT_LIGHT_COUNT];
+#endif
+  float lambert(vec3 lightDirection,vec3 surfaceNormal) {
+    return max(0.0, dot(lightDirection, surfaceNormal));
+  }
+
+  float blinnPhongSp(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) {
+    vec3 H = normalize(viewDirection + lightDirection);
+    return pow(max(0.0, dot(surfaceNormal, H)), shininess);
+  }
+#ifdef USE_DIR_LIGHT
+  vec3 directionalLight(vec3 dBaseColor,vec3 specular,float specularPower,vec3 fragNormal,vec3 fragPosition){
+    vec3 result = vec3(0,0,0);
+    for(int i = 0; i < DIR_LIGHT_COUNT;i++){
+      vec3 lColor = lambert(_dLightDir[i],fragNormal) * dBaseColor + blinnPhongSp(_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,specularPower) * specular;
+      result += lColor * _dLightColor[i] ;
+    }
+    return result;
+  }
+#endif
+#ifdef USE_POINT_LIGHT
+  vec3 pointLight(vec3 dBaseColor,vec3 specular,float specularPower,vec3 fragNormal,vec3 fragPosition){
+    vec3 result = vec3(0,0,0);
+    for(int i = 0; i < POINT_LIGHT_COUNT;i++){
+      vec3 l2p = _pLightPosition[i] - fragPosition;
+      float d = length(l2p);
+      vec2 param = _pLightParam[i];
+      float atten = max(0.,1.0-d/param.x)/(1.0 + param.y*param.y*d);
+      l2p = normalize(l2p);
+      vec3 lColor = lambert(l2p,fragNormal) * dBaseColor + blinnPhongSp(l2p,normalize(_cameraPosition - fragPosition),fragNormal,specularPower) * specular;
+      result += lColor * _pLightColor[i] * atten ;
+    }
+    return result;
+  }
+#endif
+#ifdef USE_SPOT_LIGHT
+  vec3 spotLight(vec3 dBaseColor,vec3 specular,float specularPower,vec3 fragNormal,vec3 fragPosition){
+    vec3 result = vec3(0);
+    for(int i = 0; i < SPOT_LIGHT_COUNT; i++){
+      float innerConeAngle = _sLightParam[i].x;
+      float outerConeAngle = _sLightParam[i].y;
+      float outCos=cos(outerConeAngle);
+      float innCos=cos(innerConeAngle);
+
+      vec3 l2p = fragPosition-_sLightPosition[i];
+      float d = length(l2p);
+      l2p=l2p/d;
+      float c = dot(l2p,normalize(_sLightDir[i]));
+
+      float decay = _sLightParam[i].z;//減衰係数
+      decay = 1.;
+      float distanceDecay = decay;
+      float angleDecay = decay;
+      //
+      float outerDistance = 10.0;
+      float innerDistance = 0.1;
+      //
+      float distDecayCoefficient = pow(clamp((outerDistance-d)/(outerDistance-innerDistance),0.0,1.0),distanceDecay);
+      float angleDecayCoefficient = pow(clamp((c-outCos)/(innCos-outCos),0.0,1.0),angleDecay);
+      //
+      vec3 lColor = lambert(-1.0*l2p,fragNormal) * dBaseColor + blinnPhongSp(l2p,normalize(_cameraPosition - fragPosition),vNormal,specularPower) * specular;
+      result += lColor*_sLightColor[i]*angleDecayCoefficient*distDecayCoefficient;
+    }
+    return result;
+  }
+#endif
+  vec3 shading(vec3 dBaseColor,vec3 specular,float specularPower,vec3 fragNormal,vec3 fragPosition){
+    vec3 lightingColor = vec3(0);
+    #ifdef USE_DIR_LIGHT
+    lightingColor.rgb += directionalLight(dBaseColor,specular,specularPower,fragNormal,fragPosition);
+    #endif
+    #ifdef USE_POINT_LIGHT
+    lightingColor.rgb += pointLight(dBaseColor,specular,specularPower,fragNormal,fragPosition);
+    #endif
+    #ifdef USE_SPOT_LIGHT
+    lightingColor.rgb += spotLight(dBaseColor,specular,specularPower,fragNormal,fragPosition);
+    #endif
+    return lightingColor;
+  }

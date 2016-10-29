@@ -1,0 +1,47 @@
+@Pass
+FS_PREC_FLOAT(mediump)
+
+varying vec3 vNormal;
+varying vec2 vUV;
+varying vec3 vPosition;
+
+#ifdef VS
+  attribute vec3 position;
+  attribute vec3 normal;
+  attribute vec2 uv;
+
+  uniform mat4 _matPVM;
+  uniform mat4 _matM;
+
+  void main(){
+    gl_Position = _matPVM * vec4(position,1.0);
+    vNormal = normalize((_matM * vec4(normal,0.0)).xyz);
+    vec4 posBase = (_matM * vec4(position,1.0));
+    vPosition = posBase.xyz / posBase.w;
+    vUV = uv;
+  }
+#endif
+
+#ifdef FS
+  uniform vec3 _cameraPosition;
+
+  uniform sampler2D texture;
+
+  @{default:"white",type:"color"}
+  uniform vec4 diffuse;
+
+  @{default:"gray",type:"color"}
+  uniform vec3 specular;
+
+  @{default:1.0}
+  uniform float specularPower;
+
+  @import "forward-shading"
+
+  void main(){
+    vec4 lastColor = vec4(0,0,0,diffuse.a);
+    vec3 dBaseColor = diffuse.rgb * texture2D(texture,vUV).rgb;
+    lastColor.rgb += shading(dBaseColor,specular,specularPower,vNormal,vPosition);
+    gl_FragColor = lastColor;
+  }
+#endif

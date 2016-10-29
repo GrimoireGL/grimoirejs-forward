@@ -15,8 +15,8 @@ GrimoireInterface.register(async () => {
 
   // You can edit code here.
   const g = GrimoireInterface;
+  g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
   g.registerNode("light", ["Transform", "Light"]);
   LightVariableRegister.registerAll();
-  MaterialFactory.addSORTMaterial("lambert", LambertShader);
   GLExtRequestor.request("OES_texture_float", true);
 });
