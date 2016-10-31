@@ -1,4 +1,3 @@
-#define USE_DIR_LIGHT
 #if DIR_LIGHT_COUNT > 0
   #define USE_DIR_LIGHT
 #endif

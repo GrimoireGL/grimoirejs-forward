@@ -13,7 +13,6 @@
     "./src/Components/LightComponent.ts",
     "./src/Components/LightTypeComponentBase.ts",
     "./src/Components/PointLightTypeComponent.ts",
-    "./src/Components/RenderForwardComponent.ts",
     "./src/Components/SpotLightTypeComponent.ts",
     "./src/index.ts",
     "./src/Objects/IDirectionalLightInfo.ts",
