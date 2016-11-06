@@ -37,13 +37,13 @@ export default class LightComponent extends Component {
   private _addLightTypeComponent(type: string): void {
     switch (type) {
       case "directional":
-        this.node.addComponent("DirectionalLightType", true);
+        this.node.addComponent("DirectionalLightType", null, true);
         break;
       case "point":
-        this.node.addComponent("PointLightType", true);
+        this.node.addComponent("PointLightType", null, true);
         break;
       case "spot":
-        this.node.addComponent("SpotLightType", true);
+        this.node.addComponent("SpotLightType", null, true);
         break;
     }
   }

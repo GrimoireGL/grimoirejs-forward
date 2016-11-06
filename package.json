@@ -62,11 +62,11 @@
     }
   },
   "devDependencies": {
-    "grimoirejs-cauldron": "^1.5.7",
+    "grimoirejs-cauldron": "^1.5.13",
     "grimoirejs-inquisitor": "^1.0.3"
   },
   "dependencies": {
-    "grimoirejs-fundamental": "^0.4.1",
+    "grimoirejs-fundamental": "^0.4.10",
     "grimoirejs-math": "^1.2.4",
     "typescript": "beta"
   }

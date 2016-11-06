@@ -1,14 +1,14 @@
 @Pass
-FS_PREC_FLOAT(mediump)
+FS_PREC(mediump,float)
 
 varying vec3 vNormal;
-varying vec2 vUV;
+varying vec2 vTexCoord;
 varying vec3 vPosition;
 
 #ifdef VS
   attribute vec3 position;
   attribute vec3 normal;
-  attribute vec2 uv;
+  attribute vec2 texCoord;
 
   uniform mat4 _matPVM;
   uniform mat4 _matM;
@@ -18,7 +18,7 @@ varying vec3 vPosition;
     vNormal = normalize((_matM * vec4(normal,0.0)).xyz);
     vec4 posBase = (_matM * vec4(position,1.0));
     vPosition = posBase.xyz / posBase.w;
-    vUV = uv;
+    vTexCoord = texCoord;
   }
 #endif
 
@@ -40,7 +40,7 @@ varying vec3 vPosition;
 
   void main(){
     vec4 lastColor = vec4(0,0,0,diffuse.a);
-    vec3 dBaseColor = diffuse.rgb * texture2D(texture,vUV).rgb;
+    vec3 dBaseColor = diffuse.rgb * texture2D(texture,vTexCoord).rgb;
     lastColor.rgb += shading(dBaseColor,specular,specularPower,vNormal,vPosition);
     gl_FragColor = lastColor;
   }
