@@ -30,6 +30,10 @@ Describe about this package here.
 <!-- EDIT HERE(color)-->
 <!-- /EDIT HERE-->
 
+## ForwardShadingManager コンポーネント
+<!-- EDIT HERE(@Component)-->
+<!-- /EDIT HERE-->
+属性なし
 ## Light コンポーネント
 <!-- EDIT HERE(@Component)-->
 <!-- /EDIT HERE-->
