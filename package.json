@@ -1,13 +1,13 @@
 {
   "name": "grimoirejs-forward-shading",
-  "version": "1.1.2",
+  "version": "1.1.6",
   "description": "Forward lighting package for grimoire.js",
   "main": "./lib/index.js",
   "scripts": {
     "test": "inquisitor",
     "start": "cauldron build --watch --server",
     "build": "cauldron build",
-    "prepublish": "cauldron build --babelSeparated && inquisitor && npm run doc",
+    "prepublish": "cauldron build --babelSeparated && npm run doc",
     "doc": "cauldron doc",
     "scaffold": "cauldron scaffold"
   },
@@ -66,6 +66,7 @@
     "grimoirejs-inquisitor": "^1.0.3"
   },
   "dependencies": {
+    "ava": "^0.16.0",
     "grimoirejs-fundamental": "^0.4.10",
     "grimoirejs-math": "^1.2.4",
     "typescript": "beta"
