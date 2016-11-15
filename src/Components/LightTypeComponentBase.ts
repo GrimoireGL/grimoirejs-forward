@@ -1,7 +1,7 @@
 import ILightInfo from "../Objects/ILightInfo";
 import LightsInfoDesc from "../Objects/LightsInfoDesc";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
-import Component from "grimoirejs/lib/Node/Component";
+import Component from "grimoirejs/ref/Node/Component";
 export default class LightTypeComponentBase extends Component {
   protected __ensureLightTypeContainer(sceneDesc: LightInfoSceneDesc): LightInfoSceneDesc {
     if (sceneDesc.lights && sceneDesc.lights.diretctional && sceneDesc.lights.point && sceneDesc.lights.spot) {

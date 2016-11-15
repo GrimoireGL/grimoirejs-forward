@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es6",
-    "noImplicitAny": true
+    "outDir": "./lib",
+    "declaration": true,
+    "moduleResolution": "node",
+    "declarationDir": "./ref"
   },
   "filesGlob": [
     "./src/**/*.ts"
@@ -15,12 +18,14 @@
     "./src/Components/PointLightTypeComponent.ts",
     "./src/Components/SpotLightTypeComponent.ts",
     "./src/index.ts",
+    "./src/main.ts",
     "./src/Objects/IDirectionalLightInfo.ts",
     "./src/Objects/ILightInfo.ts",
     "./src/Objects/IPointLightInfo.ts",
     "./src/Objects/ISpotLightInfo.ts",
     "./src/Objects/LightInfoSceneDesc.ts",
     "./src/Objects/LightsInfoDesc.ts",
+    "./src/raw.d.ts",
     "./src/Shaders/Basic.sort.d.ts",
     "./src/Shaders/ShadingChunk.sort.d.ts",
     "./src/Util/LightVariableRegister.ts"

@@ -1,10 +1,10 @@
-import MaterialFactory from "grimoirejs-fundamental/lib/Material/MaterialFactory";
+import MaterialFactory from "grimoirejs-fundamental/ref/Material/MaterialFactory";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
-import UniformProxy from "grimoirejs-fundamental/lib/Resource/UniformProxy";
-import ImportResolver from "grimoirejs-fundamental/lib/Material/ImportResolver";
-import EnvUniformValueResolver from "grimoirejs-fundamental/lib/Material/EnvUniformValueResolver";
-import ShadingChunk from "../Shaders/ShadingChunk.sort";
-import Basic from "../Shaders/Basic.sort";
+import UniformProxy from "grimoirejs-fundamental/ref/Resource/UniformProxy";
+import ImportResolver from "grimoirejs-fundamental/ref/Material/ImportResolver";
+import EnvUniformValueResolver from "grimoirejs-fundamental/ref/Material/EnvUniformValueResolver";
+import ShadingChunk from "raw!../Shaders/ShadingChunk.sort";
+import Basic from "raw!../Shaders/Basic.sort";
 
 export default class LightVariableRegister {
   public static registerAll(): void {

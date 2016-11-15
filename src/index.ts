@@ -1,22 +1,37 @@
-// Please do not change the name of variable on the line below.
-import GrimoireInterface from "grimoirejs";
-import GLExtRequestor from "grimoirejs-fundamental/lib/Resource/GLExtRequestor";
-import MaterialFactory from "grimoirejs-fundamental/lib/Material/MaterialFactory";
-import LightVariableRegister from "./Util/LightVariableRegister";
+  import ComponentsDirectionalLightTypeComponent from "./Components/DirectionalLightTypeComponent";
+  import ComponentsForwardShadingManagerComponent from "./Components/ForwardShadingManagerComponent";
+  import ComponentsLightComponent from "./Components/LightComponent";
+  import ComponentsLightTypeComponentBase from "./Components/LightTypeComponentBase";
+  import ComponentsPointLightTypeComponent from "./Components/PointLightTypeComponent";
+  import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
+  import UtilLightVariableRegister from "./Util/LightVariableRegister";
+  import __INTERFACE__1 from "./Objects/IDirectionalLightInfo";
+  import __INTERFACE__2 from "./Objects/ILightInfo";
+  import __INTERFACE__3 from "./Objects/IPointLightInfo";
+  import __INTERFACE__4 from "./Objects/ISpotLightInfo";
+  import __INTERFACE__5 from "./Objects/LightInfoSceneDesc";
+  import __INTERFACE__6 from "./Objects/LightsInfoDesc";
 
-import {Vector3, Color3} from "grimoirejs-math";
-// IMPORTS would be replaced for importing components.
-//<%=IMPORTS%>
+import __MAIN__ from "./main"
 
-GrimoireInterface.register(async () => {
-  // REGISTER would be replaced to actual codes to register components.
-  //<%=REGISTER%>
+var __EXPOSE__ = {
+  "Components": {
+    "DirectionalLightTypeComponent": ComponentsDirectionalLightTypeComponent,
+    "ForwardShadingManagerComponent": ComponentsForwardShadingManagerComponent,
+    "LightComponent": ComponentsLightComponent,
+    "LightTypeComponentBase": ComponentsLightTypeComponentBase,
+    "PointLightTypeComponent": ComponentsPointLightTypeComponent,
+    "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
+  },
+  "Util": {
+    "LightVariableRegister": UtilLightVariableRegister
+  }
+};
 
-  // You can edit code here.
-  const g = GrimoireInterface;
-  g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
-  g.componentDeclarations.get("MaterialContainer").attributes["material"].defaultValue = "new(phong)";
-  g.registerNode("light", ["Transform", "Light"]);
-  LightVariableRegister.registerAll();
-  GLExtRequestor.request("OES_texture_float", true);
-});
+let __BASE__ = __MAIN__();
+
+Object.assign(__BASE__|| {},__EXPOSE__);
+
+window["GrimoireJS"].lib.forward_shading = __EXPOSE__;
+
+export default __BASE__;
