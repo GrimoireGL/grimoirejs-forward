@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --watch --progress",
     "test": "tsc --outDir ./lib && babel ./lib --presets es2015  --plugin transform-runtime --out-dir ./lib-es5 && babel ./test --presets es2015  --plugin transform-runtime --out-dir ./test-es5 && ava ./test-es5/**/*Test.js --verbose ",
     "bundle": "webpack --progress --watch",
-    "prepublish": "npm run build&&npm test&&cauldron doc",
+    "prepublish": "npm run build -- --prod&&npm test&&cauldron doc",
     "build": "webpack --progress",
     "generate-expose": "cauldron generate-exposure --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref",
     "generate-reference": "cauldron generate-reference --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref"
@@ -73,7 +73,8 @@
     "typescript": "^2.0.9",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
-    "webpack-shell-plugin": "^0.4.3"
+    "webpack-shell-plugin": "^0.4.3",
+    "yargs": "^6.4.0"
   },
   "dependencies": {
     "babel-core": "^6.18.2",
