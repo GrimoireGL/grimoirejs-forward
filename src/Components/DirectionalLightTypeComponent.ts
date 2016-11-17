@@ -1,9 +1,9 @@
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
-import IAttributeDeclaration from "grimoirejs/lib/Node/IAttributeDeclaration";
-import TransformComponent from "grimoirejs-fundamental/lib/Components/TransformComponent";
-import {Vector3, Color3} from "grimoirejs-math";
-
+import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import TransformComponent from "grimoirejs-fundamental/ref/Components/TransformComponent";
+import Vector3 from "grimoirejs-math/ref/Vector3";
+import Color3 from "grimoirejs-math/ref/Color3";
 export default class DirectionalLightTypeComponent extends LightTypeComponentBase {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {

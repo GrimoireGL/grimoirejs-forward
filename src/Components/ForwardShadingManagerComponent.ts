@@ -1,6 +1,6 @@
-import Component from "grimoirejs/lib/Node/Component";
-import IAttributeDeclaration from "grimoirejs/lib/Node/IAttributeDeclaration";
-import MaterialFactory from "grimoirejs-fundamental/lib/Material/MaterialFactory";
+import Component from "grimoirejs/ref/Node/Component";
+import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import MaterialFactory from "grimoirejs-fundamental/ref/Material/MaterialFactory";
 
 export default class ForwardShadingManagerComponent extends Component {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
