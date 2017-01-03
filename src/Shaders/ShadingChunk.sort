@@ -1,3 +1,6 @@
+@ReferMacro(DIR_LIGHT_COUNT,0)
+@ReferMacro(POINT_LIGHT_COUNT,0)
+@ReferMacro(SPOT_LIGHT_COUNT,0)
 #if DIR_LIGHT_COUNT > 0
   #define USE_DIR_LIGHT
 #endif
@@ -9,18 +12,27 @@
 #endif
 
 #ifdef USE_DIR_LIGHT
+  @DIRECTIONAL_LIGHT_DIRECTIONS
   uniform vec3 _dLightDir[DIR_LIGHT_COUNT];
+  @DIRECTIONAL_LIGHT_COLORS
   uniform vec3 _dLightColor[DIR_LIGHT_COUNT];
 #endif
 #ifdef USE_POINT_LIGHT
+  @POINT_LIGHT_POSITIONS
   uniform vec3 _pLightPosition[POINT_LIGHT_COUNT];
+  @POINT_LIGHT_COLORS
   uniform vec3 _pLightColor[POINT_LIGHT_COUNT];
+  @POINT_LIGHT_PARAMS
   uniform vec2 _pLightParam[POINT_LIGHT_COUNT];
 #endif
 #ifdef USE_SPOT_LIGHT
+  @SPOT_LIGHT_POSITIONS
   uniform vec3 _sLightPosition[POINT_LIGHT_COUNT];
+  @SPOT_LIGHT_DIRECTIONS
   uniform vec3 _sLightDir[POINT_LIGHT_COUNT];
+  @SPOT_LIGHT_COLORS
   uniform vec3 _sLightColor[POINT_LIGHT_COUNT];
+  @SPOT_LIGHT_PARAMS
   uniform vec3 _sLightParam[POINT_LIGHT_COUNT];
 #endif
   float lambert(vec3 lightDirection,vec3 surfaceNormal) {

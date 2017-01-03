@@ -5,7 +5,7 @@ export default class LightComponent extends Component {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     type: {
       converter: "String",
-      defaultValue: "Directional"
+      default: "Directional"
     }
   };
 
@@ -16,7 +16,7 @@ export default class LightComponent extends Component {
   private _lastLightType: string;
 
   public $awake(): void {
-    this.getAttribute("type").addObserver((v) => this._onLightTypeChanged(v.Value), true);
+    this.getAttributeRaw("type").watch((v) => this._onLightTypeChanged(v), true);
   }
 
   /**
@@ -37,13 +37,13 @@ export default class LightComponent extends Component {
   private _addLightTypeComponent(type: string): void {
     switch (type) {
       case "directional":
-        this.node.addComponent("DirectionalLightType", null, true);
+        this.node.addComponent("DirectionalLightType", {}, true);
         break;
       case "point":
-        this.node.addComponent("PointLightType", null, true);
+        this.node.addComponent("PointLightType", {}, true);
         break;
       case "spot":
-        this.node.addComponent("SpotLightType", null, true);
+        this.node.addComponent("SpotLightType", {}, true);
         break;
     }
   }

@@ -8,19 +8,19 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",
-      defaultValue: "white"
+      default: "white"
     },
     innerCone: {
       converter: "Angle2D",
-      defaultValue: "5d"
+      default: "5d"
     },
     outerCone: {
       converter: "Angle2D",
-      defaultValue: "20d"
+      default: "20d"
     },
     decay: {
       converter: "Number",
-      defaultValue: 1
+      default: 1
     }
   };
 
@@ -35,16 +35,15 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
   private _decay: number;
 
   public $awake(): void {
-    this.getAttribute("color").boundTo("_color");
+    this.getAttributeRaw("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
-    this.getAttribute("innerCone").boundTo("_innerCone");
-    this.getAttribute("outerCone").boundTo("_outerCone");
-    this.getAttribute("decay").boundTo("_decay");
+    this.getAttributeRaw("innerCone").boundTo("_innerCone");
+    this.getAttributeRaw("outerCone").boundTo("_outerCone");
+    this.getAttributeRaw("decay").boundTo("_decay");
   }
 
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
-    this.__ensureLightTypeContainer(sceneDesc);
     const spots = sceneDesc.lights.spot;
     const index = this.__ensureIndex(spots);
     const pos = this._transform.globalPosition;

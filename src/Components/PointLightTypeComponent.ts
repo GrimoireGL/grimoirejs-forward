@@ -10,20 +10,19 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",
-      defaultValue: "white"
+      default: "white"
     },
     distance: {
       converter: "Number",
-      defaultValue: 5.0
+      default: 5.0
     },
     decay: {
       converter: "Number",
-      defaultValue: 2.0
+      default: 2.0
     }
   };
 
   private _color: Color3;
-
 
   private _transform: TransformComponent;
 
@@ -32,15 +31,14 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
   private _decay: number;
 
   public $awake(): void {
-    this.getAttribute("color").boundTo("_color");
+    this.getAttributeRaw("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
-    this.getAttribute("distance").boundTo("_distance");
-    this.getAttribute("decay").boundTo("_decay");
+    this.getAttributeRaw("distance").boundTo("_distance");
+    this.getAttributeRaw("decay").boundTo("_decay");
   }
 
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
-    this.__ensureLightTypeContainer(sceneDesc);
     const points = sceneDesc.lights.point;
     const index = this.__ensureIndex(points);
     const pos = this._transform.globalPosition;

@@ -8,7 +8,7 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",
-      defaultValue: "white"
+      default: "white"
     }
   };
 
@@ -18,14 +18,13 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
   private _transform: TransformComponent;
 
   public $awake(): void {
-    this.getAttribute("color").boundTo("_color");
+    this.getAttributeRaw("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
   }
 
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
-    this.__ensureLightTypeContainer(sceneDesc);
-    const directionals = sceneDesc.lights.diretctional;
+    const directionals = sceneDesc.lights.directional;
     const index = this.__ensureIndex(directionals);
     const d = this._transform.forward;
     directionals.directions[index * 3 + 0] = d.X;
