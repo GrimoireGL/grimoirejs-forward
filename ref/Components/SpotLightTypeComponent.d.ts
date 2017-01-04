@@ -11,7 +11,5 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     private _outerCone;
     private _decay;
     $awake(): void;
-    $mount(): void;
-    $unmount(): void;
     $update(sceneDesc: LightInfoSceneDesc): void;
 }

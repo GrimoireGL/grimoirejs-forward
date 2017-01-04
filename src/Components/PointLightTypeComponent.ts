@@ -1,3 +1,4 @@
+import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
@@ -37,6 +38,7 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
   private _intensity:number;
 
   public $awake(): void {
+    this.lightType = "point";
     this.getAttributeRaw("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
     this.getAttributeRaw("distance").boundTo("_distance");
@@ -44,26 +46,12 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
     this.getAttributeRaw("intensity").boundTo("_intensity");
   }
 
-  public $mount():void{
-    super.$mount();
-    this.__sceneLightManager.addLight("point");
-  }
-
-  public $unmount():void{
-    this.__sceneLightManager.removeLight("point");
-  }
-
   public $update(sceneDesc: LightInfoSceneDesc): void {
     const points = sceneDesc.lights.point;
     const index = this.__ensureIndex(points);
     const pos = this._transform.globalPosition;
-    points.positions[3 * index + 0] = pos.X;
-    points.positions[3 * index + 1] = pos.Y;
-    points.positions[3 * index + 2] = pos.Z;
-    points.colors[3 * index + 0] = this._color.R * this._intensity;
-    points.colors[3 * index + 1] = this._color.G * this._intensity;
-    points.colors[3 * index + 2] = this._color.B * this._intensity;
-    points.params[2 * index + 0] = this._distance;
-    points.params[2 * index + 1] = this._decay;
+    points.positions.set(index,pos.X,pos.Y,pos.Z);
+    points.colors.set(index,this._color.R * this._intensity,this._color.G * this._intensity,this._color.B * this._intensity)
+    points.params.set(index,this._distance,this._decay);
   }
 }

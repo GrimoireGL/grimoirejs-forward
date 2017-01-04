@@ -11,7 +11,5 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
     private _decay;
     private _intensity;
     $awake(): void;
-    $mount(): void;
-    $unmount(): void;
     $update(sceneDesc: LightInfoSceneDesc): void;
 }

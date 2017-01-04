@@ -1,12 +1,13 @@
 import ILightInfo from "./ILightInfo";
+import VectorArrayContainer from "../Util/VectorArrayContainer";
 interface ISpotLightInfo extends ILightInfo {
-    positions: number[];
-    directions: number[];
-    colors: number[];
+    positions: VectorArrayContainer;
+    directions: VectorArrayContainer;
+    colors: VectorArrayContainer;
     /**
      * (InnerCone,OuterCone,Decay)
-     * @type {number[]}
+     * @type {VectorArrayContainer}
      */
-    params: number[];
+    params: VectorArrayContainer;
 }
 export default ISpotLightInfo;

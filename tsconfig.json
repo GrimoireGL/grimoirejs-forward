@@ -29,7 +29,8 @@
     "./src/raw.d.ts",
     "./src/Shaders/Basic.sort.d.ts",
     "./src/Shaders/ShadingChunk.sort.d.ts",
-    "./src/Util/LightVariableRegister.ts"
+    "./src/Util/LightVariableRegister.ts",
+    "./src/Util/VectorArrayContainer.ts"
   ],
   "exclude": [],
   "atom": {

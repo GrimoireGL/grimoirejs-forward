@@ -6,6 +6,7 @@
   import ComponentsSceneLightManager from "./Components/SceneLightManager";
   import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
   import UtilLightVariableRegister from "./Util/LightVariableRegister";
+  import UtilVectorArrayContainer from "./Util/VectorArrayContainer";
   import __INTERFACE__1 from "./Objects/IDirectionalLightInfo";
   import __INTERFACE__2 from "./Objects/ILightInfo";
   import __INTERFACE__3 from "./Objects/IPointLightInfo";
@@ -29,7 +30,8 @@ var __EXPOSE__ = {
     "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
   },
   "Util": {
-    "LightVariableRegister": UtilLightVariableRegister
+    "LightVariableRegister": UtilLightVariableRegister,
+    "VectorArrayContainer": UtilVectorArrayContainer
   }
 };
 

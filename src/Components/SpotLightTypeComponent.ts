@@ -35,6 +35,7 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
   private _decay: number;
 
   public $awake(): void {
+    this.lightType = "spot";
     this.getAttributeRaw("color").boundTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
     this.getAttributeRaw("innerCone").boundTo("_innerCone");
@@ -42,33 +43,15 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     this.getAttributeRaw("decay").boundTo("_decay");
   }
 
-  public $mount():void{
-    super.$mount();
-    this.__sceneLightManager.addLight("spot");
-  }
-
-  public $unmount():void{
-    this.__sceneLightManager.removeLight("spot");
-  }
-
-
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
     const spots = sceneDesc.lights.spot;
     const index = this.__ensureIndex(spots);
     const pos = this._transform.globalPosition;
     const dir = this._transform.up.negateThis();
-    spots.positions[3 * index + 0] = pos.X;
-    spots.positions[3 * index + 1] = pos.Y;
-    spots.positions[3 * index + 2] = pos.Z;
-    spots.colors[3 * index + 0] = this._color.R;
-    spots.colors[3 * index + 1] = this._color.G;
-    spots.colors[3 * index + 2] = this._color.B;
-    spots.directions[3 * index + 0] = dir.X;
-    spots.directions[3 * index + 1] = dir.Y;
-    spots.directions[3 * index + 2] = dir.Z;
-    spots.params[3 * index + 0] = this._innerCone;
-    spots.params[3 * index + 1] = this._outerCone;
-    spots.params[3 * index + 2] = this._decay;
+    spots.positions.set(index,pos.X,pos.Y,pos.Z);
+    spots.colors.set(index,this._color.R,this._color.G,this._color.B);
+    spots.directions.set(index,dir.X,dir.Y,dir.Z);
+    spots.params.set(index,this._innerCone,this._outerCone,this._decay);
   }
 }

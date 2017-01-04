@@ -8,7 +8,5 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
     private _color;
     private _transform;
     $awake(): void;
-    $mount(): void;
-    $unmount(): void;
     $update(sceneDesc: LightInfoSceneDesc): void;
 }

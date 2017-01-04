@@ -1,3 +1,5 @@
+import LightInfoSceneDesc from "./Objects/LightInfoSceneDesc";
+import VectorArrayContainer from "./Util/VectorArrayContainer";
 import SceneLightManager from "./Components/SceneLightManager";
 import DirectionalLightTypeComponent from "./Components/DirectionalLightTypeComponent";
 import LightsInfoDesc from "./Objects/LightsInfoDesc";
@@ -13,27 +15,27 @@ import LightVariableRegister from "./Util/LightVariableRegister";
 import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent";
 export default () => {
   GrimoireInterface.register(async () => {
-    SceneComponent.onSceneDescriptionCreation((s)=>{
-      s["lights"] = {
+    SceneComponent.onSceneDescriptionCreation((s:LightInfoSceneDesc)=>{
+      s.lights = {
         directional: {
           indicies: [] as string[],
-          directions: new Array(15) as number[],
-          colors: new Array(15) as number[]
+          directions: new VectorArrayContainer(3,0),
+          colors: new VectorArrayContainer(3,0)
         },
         point: {
           indicies: [] as string[],
-          positions: new Array(15) as number[],
-          colors: new Array(15) as number[],
-          params: new Array(10) as number[]
+          positions: new VectorArrayContainer(3,0),
+          colors: new VectorArrayContainer(3,0),
+          params: new VectorArrayContainer(2,0)
         },
         spot: {
           indicies: [] as string[],
-          positions: new Array(15) as number[],
-          directions: new Array(15) as number[],
-          colors: new Array(15) as number[],
-          params: new Array(15) as number[]
+          positions: new VectorArrayContainer(3,0),
+          directions: new VectorArrayContainer(3,0),
+          colors: new VectorArrayContainer(3,0),
+          params: new VectorArrayContainer(3,0)
         }
-      } as LightsInfoDesc;;
+      };
     })
     const g = GrimoireInterface;
     g.registerComponent("ForwardShadingManager",ForwardShadingManager);
