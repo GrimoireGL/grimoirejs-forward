@@ -3,6 +3,7 @@
   import ComponentsLightComponent from "./Components/LightComponent";
   import ComponentsLightTypeComponentBase from "./Components/LightTypeComponentBase";
   import ComponentsPointLightTypeComponent from "./Components/PointLightTypeComponent";
+  import ComponentsSceneLightManager from "./Components/SceneLightManager";
   import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
   import UtilLightVariableRegister from "./Util/LightVariableRegister";
   import __INTERFACE__1 from "./Objects/IDirectionalLightInfo";
@@ -24,6 +25,7 @@ var __EXPOSE__ = {
     "LightComponent": ComponentsLightComponent,
     "LightTypeComponentBase": ComponentsLightTypeComponentBase,
     "PointLightTypeComponent": ComponentsPointLightTypeComponent,
+    "SceneLightManager": ComponentsSceneLightManager,
     "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
   },
   "Util": {

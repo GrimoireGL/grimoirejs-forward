@@ -1,3 +1,4 @@
+import LightTypeComponentBase from "./LightTypeComponentBase";
 import Component from "grimoirejs/ref/Node/Component";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
 
@@ -15,6 +16,8 @@ export default class LightComponent extends Component {
    */
   private _lastLightType: string;
 
+  private _lightTypeComponent:LightTypeComponentBase;
+
   public $awake(): void {
     this.getAttributeRaw("type").watch((v) => this._onLightTypeChanged(v), true);
   }
@@ -31,20 +34,27 @@ export default class LightComponent extends Component {
     } else {
       this._lastLightType = type;
     }
+    this._removeLastTypeComponent();
     this._addLightTypeComponent(type);
   }
 
   private _addLightTypeComponent(type: string): void {
     switch (type) {
       case "directional":
-        this.node.addComponent("DirectionalLightType", {}, true);
+        this._lightTypeComponent = this.node.addComponent("DirectionalLightType", {}, true) as LightTypeComponentBase;
         break;
       case "point":
-        this.node.addComponent("PointLightType", {}, true);
+        this._lightTypeComponent = this.node.addComponent("PointLightType", {}, true) as LightTypeComponentBase;
         break;
       case "spot":
-        this.node.addComponent("SpotLightType", {}, true);
+        this._lightTypeComponent = this.node.addComponent("SpotLightType", {}, true) as LightTypeComponentBase;
         break;
+    }
+  }
+
+  private _removeLastTypeComponent():void{
+    if(this._lightTypeComponent){
+      this._lightTypeComponent.dispose();
     }
   }
 }

@@ -42,6 +42,16 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     this.getAttributeRaw("decay").boundTo("_decay");
   }
 
+  public $mount():void{
+    super.$mount();
+    this.__sceneLightManager.addLight("spot");
+  }
+
+  public $unmount():void{
+    this.__sceneLightManager.removeLight("spot");
+  }
+
+
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
     const spots = sceneDesc.lights.spot;

@@ -23,26 +23,31 @@ varying vec3 vPosition;
 #endif
 
 #ifdef FS
+  @CAMERA_POSITION
   uniform vec3 _cameraPosition;
 
   uniform sampler2D texture;
 
   @{default:"white",type:"color"}
-  uniform vec4 diffuse;
+  uniform vec4 albedo;
+
+  @{default:0.1}
+  uniform float roughness;
+
+  @{default:0.99}
+  uniform float refractive;
 
   @{default:"gray",type:"color"}
   uniform vec3 specular;
 
-  @{default:1.0}
-  uniform float specularPower;
-
   @import "forward-shading"
 
   void main(){
-    vec4 lastColor = vec4(0,0,0,diffuse.a);
-    vec3 dBaseColor = diffuse.rgb * texture2D(texture,vTexCoord).rgb;
-    lastColor.rgb += shading(dBaseColor,specular,specularPower,vNormal,vPosition);
+    vec4 lastColor = vec4(0,0,0,albedo.a);
+    vec3 dBaseColor = albedo.rgb * pow(texture2D(texture,vTexCoord).rgb,vec3(2.2));
+    lastColor.rgb += shading(dBaseColor,vNormal,vPosition);
     gl_FragColor = lastColor;
+    gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
   }
 #endif
 }

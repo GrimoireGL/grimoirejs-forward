@@ -22,6 +22,16 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
     this._transform = this.node.getComponent("Transform") as TransformComponent;
   }
 
+  public $mount():void{
+    super.$mount();
+    this.__sceneLightManager.addLight("directional");
+  }
+
+  public $unmount():void{
+    this.__sceneLightManager.removeLight("directional");
+  }
+
+
 
   public $update(sceneDesc: LightInfoSceneDesc): void {
     const directionals = sceneDesc.lights.directional;

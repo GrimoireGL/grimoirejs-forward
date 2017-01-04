@@ -9,6 +9,7 @@ export default class LightComponent extends Component {
      * @type {string}
      */
     private _lastLightType;
+    private _lightTypeComponent;
     $awake(): void;
     /**
      * Called when the light type was changed
@@ -16,4 +17,5 @@ export default class LightComponent extends Component {
      */
     private _onLightTypeChanged(type);
     private _addLightTypeComponent(type);
+    private _removeLastTypeComponent();
 }

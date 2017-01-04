@@ -1,3 +1,4 @@
+import SceneLightManager from "./Components/SceneLightManager";
 import DirectionalLightTypeComponent from "./Components/DirectionalLightTypeComponent";
 import LightsInfoDesc from "./Objects/LightsInfoDesc";
 import LightComponent from "./Components/LightComponent";
@@ -34,12 +35,14 @@ export default () => {
         }
       } as LightsInfoDesc;;
     })
-    GrimoireInterface.registerComponent("ForwardShadingManager",ForwardShadingManager);
-    GrimoireInterface.registerComponent("Light",LightComponent);
-    GrimoireInterface.registerComponent("DirectionalLightType",DirectionalLightTypeComponent);
-    GrimoireInterface.registerComponent("PointLightType",PointLightTypeComponent);
-    GrimoireInterface.registerComponent("SpotLightType",SpotLightTypeComponent);
     const g = GrimoireInterface;
+    g.registerComponent("ForwardShadingManager",ForwardShadingManager);
+    g.registerComponent("Light",LightComponent);
+    g.registerComponent("DirectionalLightType",DirectionalLightTypeComponent);
+    g.registerComponent("PointLightType",PointLightTypeComponent);
+    g.registerComponent("SpotLightType",SpotLightTypeComponent);
+    g.registerComponent("SceneLightManager",SceneLightManager);
+    g.overrideDeclaration("scene",["SceneLightManager"]);
     g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
     g.componentDeclarations.get("MaterialContainer").attributes["material"].default = "new(phong)";
     g.registerNode("light", ["Transform", "Light"]);
