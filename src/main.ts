@@ -1,3 +1,5 @@
+import RenderShadowMapComponent from "./Components/RenderShadowMapComponent";
+import ShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
 import LightInfoSceneDesc from "./Objects/LightInfoSceneDesc";
 import VectorArrayContainer from "./Util/VectorArrayContainer";
 import SceneLightManager from "./Components/SceneLightManager";
@@ -20,7 +22,8 @@ export default () => {
         directional: {
           indicies: [] as string[],
           directions: new VectorArrayContainer(3,0),
-          colors: new VectorArrayContainer(3,0)
+          colors: new VectorArrayContainer(3,0),
+          params: new VectorArrayContainer(4,0)
         },
         point: {
           indicies: [] as string[],
@@ -34,9 +37,14 @@ export default () => {
           directions: new VectorArrayContainer(3,0),
           colors: new VectorArrayContainer(3,0),
           params: new VectorArrayContainer(3,0)
+        },
+        shadowMap:{
+          size:0,
+          xCount:0,
+          shadowMap:null
         }
       };
-    })
+    });
     const g = GrimoireInterface;
     g.registerComponent("ForwardShadingManager",ForwardShadingManager);
     g.registerComponent("Light",LightComponent);
@@ -44,9 +52,12 @@ export default () => {
     g.registerComponent("PointLightType",PointLightTypeComponent);
     g.registerComponent("SpotLightType",SpotLightTypeComponent);
     g.registerComponent("SceneLightManager",SceneLightManager);
+    g.registerComponent("ShadowMapCamera",ShadowMapCameraComponent);
+    g.registerComponent("RenderShadowMap",RenderShadowMapComponent);
     g.overrideDeclaration("scene",["SceneLightManager"]);
+    g.overrideDeclaration("render-scene",["RenderShadowMap"]);
     g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
-    g.componentDeclarations.get("MaterialContainer").attributes["material"].default = "new(phong)";
+    g.componentDeclarations.get("MaterialContainer").attributes["material"].default = "new(basic)";
     g.registerNode("light", ["Transform", "Light"]);
     LightVariableRegister.registerAll();
     GLExtRequestor.request("OES_texture_float", true);

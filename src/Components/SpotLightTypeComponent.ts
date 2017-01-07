@@ -21,6 +21,10 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     decay: {
       converter: "Number",
       default: 1
+    },
+    intensity:{
+      converter:"Number",
+      default:1
     }
   };
 
@@ -34,6 +38,8 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
 
   private _decay: number;
 
+  private _intensity:number;
+
   public $awake(): void {
     this.lightType = "spot";
     this.getAttributeRaw("color").boundTo("_color");
@@ -41,6 +47,7 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     this.getAttributeRaw("innerCone").boundTo("_innerCone");
     this.getAttributeRaw("outerCone").boundTo("_outerCone");
     this.getAttributeRaw("decay").boundTo("_decay");
+    this.getAttributeRaw("intensity").boundTo("_intensity");
   }
 
 
@@ -50,7 +57,7 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     const pos = this._transform.globalPosition;
     const dir = this._transform.up.negateThis();
     spots.positions.set(index,pos.X,pos.Y,pos.Z);
-    spots.colors.set(index,this._color.R,this._color.G,this._color.B);
+    spots.colors.set(index,this._color.R * this._intensity,this._color.G * this._intensity,this._color.B * this._intensity);
     spots.directions.set(index,dir.X,dir.Y,dir.Z);
     spots.params.set(index,this._innerCone,this._outerCone,this._decay);
   }

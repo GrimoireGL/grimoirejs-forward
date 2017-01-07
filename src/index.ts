@@ -3,7 +3,9 @@
   import ComponentsLightComponent from "./Components/LightComponent";
   import ComponentsLightTypeComponentBase from "./Components/LightTypeComponentBase";
   import ComponentsPointLightTypeComponent from "./Components/PointLightTypeComponent";
+  import ComponentsRenderShadowMapComponent from "./Components/RenderShadowMapComponent";
   import ComponentsSceneLightManager from "./Components/SceneLightManager";
+  import ComponentsShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
   import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
   import UtilLightVariableRegister from "./Util/LightVariableRegister";
   import UtilVectorArrayContainer from "./Util/VectorArrayContainer";
@@ -26,7 +28,9 @@ var __EXPOSE__ = {
     "LightComponent": ComponentsLightComponent,
     "LightTypeComponentBase": ComponentsLightTypeComponentBase,
     "PointLightTypeComponent": ComponentsPointLightTypeComponent,
+    "RenderShadowMapComponent": ComponentsRenderShadowMapComponent,
     "SceneLightManager": ComponentsSceneLightManager,
+    "ShadowMapCameraComponent": ComponentsShadowMapCameraComponent,
     "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
   },
   "Util": {

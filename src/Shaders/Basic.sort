@@ -1,3 +1,4 @@
+@Technique default{
 @Pass{
 FS_PREC(mediump,float)
 
@@ -28,6 +29,14 @@ varying vec3 vPosition;
 
   uniform sampler2D texture;
 
+  @HAS_TEXTURE{sampler:"texture"}
+  uniform bool useTexture;
+
+  uniform sampler2D roughnessMap;
+
+  @HAS_TEXTURE{sampler:"roughnessMap"}
+  uniform bool useRoughnessMap;
+
   @{default:"white",type:"color"}
   uniform vec4 albedo;
 
@@ -37,17 +46,62 @@ varying vec3 vPosition;
   @{default:0.99}
   uniform float refractive;
 
-  @{default:"gray",type:"color"}
-  uniform vec3 specular;
+  @{default:"black",type:"color"}
+  uniform vec3 emission;
+
+  @{default:0.3}
+  uniform float kCoeff;
 
   @import "forward-shading"
 
   void main(){
     vec4 lastColor = vec4(0,0,0,albedo.a);
-    vec3 dBaseColor = albedo.rgb * pow(texture2D(texture,vTexCoord).rgb,vec3(2.2));
-    lastColor.rgb += shading(dBaseColor,vNormal,vPosition);
+    vec3 dBaseColor = albedo.rgb;
+    if(useTexture){
+      dBaseColor = pow(texture2D(texture,vTexCoord).rgb,vec3(2.2));
+    }
+    float r = roughness;
+    if(useRoughnessMap){
+      r = texture2D(roughnessMap,vTexCoord).r;
+    }
+    lastColor.rgb += emission + shading(dBaseColor,vNormal,vPosition,r);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
   }
 #endif
+}
+}
+
+@Technique depth{
+  @Pass{
+  FS_PREC(highp,float)
+
+  varying vec4 vPos;
+
+  vec3 EncodeFloatRGBA( float v ) {
+    vec3 enc = vec3(1.0, 255.0, 65025.0) * v;
+    enc = fract(enc);
+    enc -= enc.yzz * vec3(1.0/255.0,1.0/255.0,0.0);
+    return enc;
+  }
+
+  float DecodeFloatRGBA( vec3 rgb ) {
+  return dot( rgb, vec3(1.0, 1./255.0, 1./65025.0) );
+}
+
+  #ifdef VS
+    attribute vec3 position;
+    uniform mat4 _matPVM;
+    void main(){
+      gl_Position =vPos= _matPVM * vec4(position,1.0);
+    }
+  #endif
+
+  #ifdef FS
+    void main(){
+      gl_FragColor.rgb = EncodeFloatRGBA(vPos.z/vPos.w);
+      gl_FragColor.a = 1.0;
+    }
+  #endif
+  }
 }

@@ -9,9 +9,10 @@ import Basic from "raw!../Shaders/Basic.sort";
 export default class LightVariableRegister {
   public static registerAll(): void {
     ImportResolver.staticImports["forward-shading"] = ShadingChunk;
-    MaterialFactory.addSORTMaterial("phong", Basic);
+    MaterialFactory.addSORTMaterial("basic", Basic);
     this._registerLightVariable("DIRECTIONAL_LIGHT_DIRECTIONS", (n, p, i) => p.uniformVector3Array(n, i.lights.directional.directions.elements));
     this._registerLightVariable("DIRECTIONAL_LIGHT_COLORS", (n, p, i) => p.uniformVector3Array(n, i.lights.directional.colors.elements));
+    this._registerLightVariable("DIRECTIONAL_LIGHT_PARAMS", (n, p, i) => p.uniformVector4Array(n, i.lights.directional.params.elements));
     this._registerLightVariable("POINT_LIGHT_POSITIONS", (n, p, i) => p.uniformVector3Array(n, i.lights.point.positions.elements));
     this._registerLightVariable("POINT_LIGHT_COLORS", (n, p, i) => p.uniformVector3Array(n, i.lights.point.colors.elements));
     this._registerLightVariable("POINT_LIGHT_PARAMS", (n, p, i) => p.uniformVector2Array(n, i.lights.point.params.elements));
@@ -19,6 +20,9 @@ export default class LightVariableRegister {
     this._registerLightVariable("SPOT_LIGHT_COLORS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.colors.elements));
     this._registerLightVariable("SPOT_LIGHT_DIRECTIONS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.directions.elements));
     this._registerLightVariable("SPOT_LIGHT_PARAMS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.params.elements));
+    this._registerLightVariable("SHADOW_MAP_TEXTURE",(n, p, i) =>p.uniformTexture2D(n,i.lights.shadowMap.shadowMap));
+    this._registerLightVariable("SHADOW_MAP_X_COUNT",(n, p, i) =>p.uniformInt(n,i.lights.shadowMap.xCount));
+    this._registerLightVariable("SHADOW_MAP_ELEMENT_SIZE",(n,p,i)=>p.uniformFloat(n,i.lights.shadowMap.size));
   }
 
   private static _registerLightVariable(semantic: string, register: (name: string, proxy: UniformProxy, info: LightInfoSceneDesc) => void): void {
