@@ -4,7 +4,7 @@ FS_PREC(mediump,float)
 
 varying vec3 vNormal;
 varying vec2 vTexCoord;
-varying vec3 vPosition;
+varying vec4 vPosition;
 
 #ifdef VS
   attribute vec3 position;
@@ -17,8 +17,7 @@ varying vec3 vPosition;
   void main(){
     gl_Position = _matPVM * vec4(position,1.0);
     vNormal = normalize((_matM * vec4(normal,0.0)).xyz);
-    vec4 posBase = (_matM * vec4(position,1.0));
-    vPosition = posBase.xyz / posBase.w;
+    vPosition = (_matM * vec4(position,1.0));
     vTexCoord = texCoord;
   }
 #endif
@@ -64,13 +63,9 @@ varying vec3 vPosition;
     if(useRoughnessMap){
       r = texture2D(roughnessMap,vTexCoord).r;
     }
-    lastColor.rgb += emission + shading(dBaseColor,vNormal,vPosition,r);
+    lastColor.rgb += emission + shading(dBaseColor,vNormal,vPosition.xyz/vPosition.w,r);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
-
-    #ifdef USE_SHADOW_MAP
-      gl_FragColor.rgb = texture2D(_shadowMapTexture,vTexCoord).rgb;
-    #endif
   }
 #endif
 }
@@ -82,28 +77,28 @@ varying vec3 vPosition;
 
   varying vec4 vPos;
 
-  vec3 EncodeFloatRGBA( float v ) {
+  vec3 EncodeFloatRGB( float v ) {
     vec3 enc = vec3(1.0, 255.0, 65025.0) * v;
     enc = fract(enc);
     enc -= enc.yzz * vec3(1.0/255.0,1.0/255.0,0.0);
     return enc;
   }
 
-  float DecodeFloatRGBA( vec3 rgb ) {
-  return dot( rgb, vec3(1.0, 1./255.0, 1./65025.0) );
-}
+  float DecodeFloatRGB( vec3 rgb ) {
+    return dot( rgb, vec3(1.0, 1./255.0, 1./65025.0) );
+  }
 
   #ifdef VS
     attribute vec3 position;
     uniform mat4 _matPVM;
     void main(){
-      gl_Position =vPos= _matPVM * vec4(position,1.0);
+      gl_Position = vPos= _matPVM * vec4(position,1.0);
     }
   #endif
 
   #ifdef FS
     void main(){
-      gl_FragColor.rgb = EncodeFloatRGBA(vPos.z/vPos.w);
+      gl_FragColor.rgb = EncodeFloatRGB((vPos.z/vPos.w + 1.0)/2.0);
       gl_FragColor.a = 1.0;
     }
   #endif

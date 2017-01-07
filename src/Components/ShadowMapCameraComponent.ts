@@ -3,12 +3,12 @@ import SceneLightManager from "./SceneLightManager";
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
 import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
 export default class ShadowMapCameraComponent extends CameraComponent {
-  
+
   public shadowMapIndex:number;
 
   public $awake():void{
     this.Near = 0.01;
-    this.Far = 10.0;
+    this.Far = 100.0;
     this.OrthographicMode = true;
     this.OrthoSize = 10;
     this.AutoAspect = false;

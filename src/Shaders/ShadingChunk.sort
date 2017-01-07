@@ -65,10 +65,15 @@
   @SHADOW_MAP_X_COUNT
   uniform int _shadowMapXCount;
 
-  uniform mat4 _inverseShadowMap[SHADOW_MAP_COUNT];
+  @SHADOW_MATRICES
+  uniform highp mat4 _lightMatrices[SHADOW_MAP_COUNT];
 
   @SHADOW_MAP_TEXTURE
   uniform sampler2D _shadowMapTexture;
+
+  highp float decodeFloatRGB( vec3 rgb ) {
+    return dot( rgb, vec3(1.0, 1./255.0, 1./65025.0) );
+  }
 #endif
 
   float lambert(vec3 lightDirection,vec3 surfaceNormal) {
@@ -131,17 +136,30 @@
     }
   #endif
 #ifdef USE_DIR_LIGHT
+
+@{default:0.1}
+uniform float smT;
   vec3 directionalLight(vec3 baseColor,vec3 fragNormal,vec3 fragPosition,float roughness){
     vec3 result = vec3(0,0,0);
     for(int i = 0; i < DIR_LIGHT_COUNT;i++){
       vec3 lI = lambert(fragNormal,-_dLightDir[i]) * _dLightColor[i];
+      float sc = 1.0;
       #ifdef USE_SHADOW_MAP
         if(_dLightParams[i].x >= 0.0){
           int shadowIndex = int(_dLightParams[i].x);
-          vec3 lPos = _dLightParams[i].yzw;
+          highp mat4 lMat = _lightMatrices[0];
+          highp vec4 lPosW = lMat * vec4(fragPosition,1.0);
+          vec2 lUV = lPosW.xy/lPosW.w / 2.0 + vec2(0.5);
+          if(all(bvec4(greaterThanEqual(lUV,vec2(0,0)),lessThanEqual(lUV,vec2(1,1))))){ // ignore out of uv
+            highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+            highp float od = (lPosW.z/lPosW.w + 1.0)/2.0;
+            if(d < od){
+              sc = 0.0;
+            }
+          }
         }
       #endif
-      vec3 lColor = lI * PBR_BRDF(baseColor,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,roughness);
+      vec3 lColor = sc * lI * PBR_BRDF(baseColor,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,roughness);
       result += lColor;
     }
     return result;
