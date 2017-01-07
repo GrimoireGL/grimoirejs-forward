@@ -41,7 +41,8 @@ export default () => {
         shadowMap:{
           size:0,
           xCount:0,
-          shadowMap:null
+          shadowMap:null,
+          lightMatrices:null
         }
       };
     });

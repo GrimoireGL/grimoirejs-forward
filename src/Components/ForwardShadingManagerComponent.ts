@@ -24,6 +24,7 @@ export default class ForwardShadingManagerComponent extends Component {
         this._macroRegistry.setValue("DIR_LIGHT_COUNT", "0");
         this._macroRegistry.setValue("POINT_LIGHT_COUNT", "0");
         this._macroRegistry.setValue("SPOT_LIGHT_COUNT", "0");
+        this._macroRegistry.setValue("SHADOW_MAP_COUNT", "0");
     }
 
     public addSceneLightManager(s: SceneLightManager): void {
@@ -38,15 +39,17 @@ export default class ForwardShadingManagerComponent extends Component {
     }
 
     public updateLightCount(): void {
-        let d = 0, s = 0, p = 0;
+        let d = 0, s = 0, p = 0,sm = 0;
         for (let i = 0; i < this._sceneLightManagers.length; i++) {
             const slm = this._sceneLightManagers[i];
-            d = Math.max(slm.lights.directional.length);
-            p = Math.max(slm.lights.point.length);
-            s = Math.max(slm.lights.spot.length);
+            d = Math.max(slm.lights.directional.length,d);
+            p = Math.max(slm.lights.point.length,p);
+            s = Math.max(slm.lights.spot.length,s);
+            sm = Math.max(slm.shadowMapCameras.length,sm);
         }
         this._macroRegistry.setValue("DIR_LIGHT_COUNT", d+"");
         this._macroRegistry.setValue("POINT_LIGHT_COUNT", p+ "");
         this._macroRegistry.setValue("SPOT_LIGHT_COUNT",  s + "");
+        this._macroRegistry.setValue("SHADOW_MAP_COUNT", sm + "");
     }
 }

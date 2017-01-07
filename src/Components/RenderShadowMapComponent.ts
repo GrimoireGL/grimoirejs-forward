@@ -12,7 +12,7 @@ export default class RenderShadowMapComponent extends Component {
 
     private _renderSceneComponent: RenderScene;
 
-    private _gl:WebGLRenderingContext;
+    private _gl: WebGLRenderingContext;
 
     public $mount(): void {
         this._renderSceneComponent = this.node.getComponent(RenderScene);
@@ -20,25 +20,33 @@ export default class RenderShadowMapComponent extends Component {
             throw new Error(`There was no RenderScene component found on the node attached RenderShadowMapComponent`);
         }
         this._gl = this.companion.get("gl");
+
     }
 
     public $render(args: IRenderRendererMessage): void {
         const sceneCamera = args.camera ? args.camera : this._renderSceneComponent.camera;
         const slm = sceneCamera.containedScene.node.getComponent(SceneLightManager);
+        if (slm.shadowMapCameras.length === 0) {
+            return;
+        }
+        slm.shadowMapFBO.bind();
+        this._gl.clearColor(1,0,1,1);
+        this._gl.clearDepth(1);
+        this._gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT|WebGLRenderingContext.DEPTH_BUFFER_BIT);
+        slm.updateLightMatricies();
         slm.shadowMapCameras.forEach(v => {
-            this._gl.viewport(0,0,512,512);
-            this._gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER,null);
-            v.fbo.bind();
-            this._gl.clear(WebGLRenderingContext.DEPTH_BUFFER_BIT|WebGLRenderingContext.COLOR_BUFFER_BIT);
+            slm.viewportByShadowmapIndex(v.shadowMapIndex);
             v.updateContainedScene(args.loopIndex);
             v.renderScene({
                 camera: v,
-                buffers:null,
+                buffers: null,
                 layer: "default",
                 viewport: args.viewport,
                 loopIndex: args.loopIndex,
                 technique: "depth"
             });
         });
+        this._gl.flush();
+        this._gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER,null);
     }
 }

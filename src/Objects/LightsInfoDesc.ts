@@ -9,7 +9,8 @@ interface LightsInfoDesc {
   shadowMap:{
     size:number,
     xCount:number,
-    shadowMap:Texture2D;
+    shadowMap:Texture2D,
+    lightMatrices:Float32Array;
   }
 }
 

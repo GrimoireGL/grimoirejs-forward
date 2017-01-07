@@ -1,3 +1,4 @@
+import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
 import Texture2D from "../../node_modules/grimoirejs-fundamental/ref/Resource/Texture2D";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
 import ShadowMapCamera from "./ShadowMapCameraComponent";
@@ -6,6 +7,7 @@ import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent
 import LightInfoDesc from "../Objects/LightsInfoDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import ForwardShadingManager from "./ForwardShadingManagerComponent";
+import Renderbuffer from "grimoirejs-fundamental/ref/Resource/Renderbuffer";
 import Component from "grimoirejs/ref/Node/Component";
 export default class SceneLightManager extends Component {
 
@@ -28,6 +30,10 @@ export default class SceneLightManager extends Component {
 
     public shadowMapCameras: ShadowMapCamera[] = [];
 
+    public lightMatrices: Float32Array;
+
+    public shadowMapFBO:Framebuffer;
+
     public shadowQuality: number;
 
     private _shadingManager: ForwardShadingManager;
@@ -42,6 +48,8 @@ export default class SceneLightManager extends Component {
 
     private _shadowMapTexture: Texture2D;
 
+    private _shadowMapRenderbuffer:Renderbuffer;
+
     public $awake(): void {
         this.getAttributeRaw("shadowQuality").watch(v => {
             this._singleShadowMapSize = Math.pow(2, v);
@@ -51,16 +59,22 @@ export default class SceneLightManager extends Component {
     public $mount(): void {
         this._gl = this.companion.get("gl");
         this._shadowMapTexture = new Texture2D(this._gl);
+        this._shadowMapRenderbuffer  = new Renderbuffer(this._gl);
         this._maxTextureSize = this._gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE);
         this._shadingManager = this.node.getComponentInAncesotor(ForwardShadingManager);
         const scene = this.node.getComponent(SceneComponent);
         this._lightSceneDesc = (scene.sceneDescription as LightInfoSceneDesc).lights;
         this._shadingManager.addSceneLightManager(this);
         this._updateShadowMapSize();
+        this.shadowMapFBO = new Framebuffer(this._gl);
+        this.shadowMapFBO.update(this._shadowMapTexture);
+        this.shadowMapFBO.update(this._shadowMapRenderbuffer);
     }
 
     public $unmount(): void {
         this._shadingManager.removeSceneLightManager(this);
+        this.shadowMapFBO.destroy();
+        this._shadowMapTexture.destroy();
     }
 
     public addLight(light: LightTypeComponentBase): void {
@@ -131,6 +145,22 @@ export default class SceneLightManager extends Component {
         this._updateShadowMapSize();
     }
 
+    public viewportByShadowmapIndex(index:number):void{
+      const accumWidth = index * this._singleShadowMapSize;
+      this._gl.viewport(accumWidth % this._singleShadowMapSize
+        ,Math.floor(accumWidth/this._singleShadowMapSize)
+        ,this._singleShadowMapSize,this._singleShadowMapSize);
+    }
+
+    public updateLightMatricies():void{
+      this.shadowMapCameras.forEach((v,i)=>{
+        const pv = v.ProjectionViewMatrix.rawElements;
+        for(let j = 0; j < 16; j++){
+          this.lightMatrices[16 * i + j] = pv[j];
+        }
+      });
+    }
+
     /**
      * Update texture size
      */
@@ -150,13 +180,17 @@ export default class SceneLightManager extends Component {
         }
         if (lxc === 0 && yc === 0) {
           this._shadowMapTexture.update(0,1,1,0,WebGLRenderingContext.RGB,WebGLRenderingContext.UNSIGNED_BYTE);
+          this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,1,1);
         } else {
             this._shadowMapTexture.update(0, xLength, (yc + 1) * single, 0, WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE);
+            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,xLength, (yc + 1) * single);
         }
+        this.lightMatrices = new Float32Array(count * 16);
         this._lightSceneDesc.shadowMap = {
           size:single / max,
           xCount:xLength/single,
-          shadowMap:this._shadowMapTexture
+          shadowMap:this._shadowMapTexture,
+          lightMatrices:this.lightMatrices
         };
     }
 }

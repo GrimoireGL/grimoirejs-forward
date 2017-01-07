@@ -10,6 +10,7 @@ interface LightsInfoDesc {
         size: number;
         xCount: number;
         shadowMap: Texture2D;
+        lightMatrices: Float32Array;
     };
 }
 export default LightsInfoDesc;
