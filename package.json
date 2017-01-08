@@ -1,13 +1,12 @@
 {
   "name": "grimoirejs-forward-shading",
-  "version": "1.2.0beta0",
+  "version": "1.2.0-beta1",
   "description": "Forward lighting package for grimoire.js",
   "main": "./ref/index.js",
   "scripts": {
     "start": "webpack --watch --progress",
-    "test": "tsc --outDir ./lib && babel ./lib --presets es2015  --plugin transform-runtime --out-dir ./lib-es5 && babel ./test --presets es2015  --plugin transform-runtime --out-dir ./test-es5 && ava ./test-es5/**/*Test.js --verbose ",
     "bundle": "webpack --progress --watch",
-    "prepublish": "npm run build -- --prod&&npm test&&cauldron doc",
+    "prepublish": "npm run build -- --prod",
     "build": "webpack --progress",
     "generate-expose": "cauldron generate-exposure --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref",
     "generate-reference": "cauldron generate-reference --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref"
@@ -28,8 +27,8 @@
   "typings": "./ref/index.d.ts",
   "files": [
     "src",
-    "lib",
-    "lib-es5"
+    "register",
+    "ref"
   ],
   "grimoire": {
     "isPlugin": true,
