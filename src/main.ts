@@ -1,3 +1,4 @@
+import SpotLightShadowMapCameraComponent from "./Components/SpotLightShadowMapCameraComponent";
 import Vector2 from "grimoirejs-math/ref/Vector2";
 import RenderShadowMapComponent from "./Components/RenderShadowMapComponent";
 import ShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
@@ -37,10 +38,9 @@ export default () => {
           positions: new VectorArrayContainer(3,0),
           directions: new VectorArrayContainer(3,0),
           colors: new VectorArrayContainer(3,0),
-          params: new VectorArrayContainer(3,0)
+          params: new VectorArrayContainer(4,0)
         },
         shadowMap:{
-          size:0,
           shadowMapCountPerEdge:new Vector2(0,0),
           shadowMap:null,
           lightMatrices:null,
@@ -58,6 +58,7 @@ export default () => {
     g.registerComponent("SceneLightManager",SceneLightManager);
     g.registerComponent("ShadowMapCamera",ShadowMapCameraComponent);
     g.registerComponent("RenderShadowMap",RenderShadowMapComponent);
+    g.registerComponent("SpotLightShadowMapCamera",SpotLightShadowMapCameraComponent);
     g.overrideDeclaration("scene",["SceneLightManager"]);
     g.overrideDeclaration("render-scene",["RenderShadowMap"]);
     g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));

@@ -8,7 +8,6 @@ interface LightsInfoDesc {
     point: IPointLightInfo;
     spot: ISpotLightInfo;
     shadowMap: {
-        size: number;
         shadowMapCountPerEdge: Vector2;
         pixelSize: number;
         count: number;

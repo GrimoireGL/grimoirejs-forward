@@ -1,3 +1,4 @@
+import SpotLightShadowMapCameraComponent from "./SpotLightShadowMapCameraComponent";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
@@ -25,6 +26,10 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     intensity:{
       converter:"Number",
       default:1
+    },
+    shadow:{
+      converter:"Boolean",
+      default:false
     }
   };
 
@@ -40,6 +45,8 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
 
   private _intensity:number;
 
+  private _shadowCamera:SpotLightShadowMapCameraComponent;
+
   public $awake(): void {
     this.lightType = "spot";
     this.getAttributeRaw("color").boundTo("_color");
@@ -48,6 +55,7 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     this.getAttributeRaw("outerCone").boundTo("_outerCone");
     this.getAttributeRaw("decay").boundTo("_decay");
     this.getAttributeRaw("intensity").boundTo("_intensity");
+    this.getAttributeRaw("shadow").watch(v=>this._useShadowChanged(v),true);
   }
 
 
@@ -59,6 +67,15 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     spots.positions.set(index,pos.X,pos.Y,pos.Z);
     spots.colors.set(index,this._color.R * this._intensity,this._color.G * this._intensity,this._color.B * this._intensity);
     spots.directions.set(index,dir.X,dir.Y,dir.Z);
-    spots.params.set(index,this._innerCone,this._outerCone,this._decay);
+    spots.params.set(index,this._innerCone,this._outerCone,this._decay,this._shadowCamera? this._shadowCamera.shadowMapIndex:-1);
+  }
+
+  private _useShadowChanged(v:boolean):void{
+    if(!v && this._shadowCamera){
+      this._shadowCamera.dispose();
+      this._shadowCamera = null;
+    }else if(v){
+      this._shadowCamera = this.node.addComponent("SpotLightShadowMapCamera") as any as SpotLightShadowMapCameraComponent;
+    }
   }
 }

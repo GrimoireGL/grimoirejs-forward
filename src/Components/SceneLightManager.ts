@@ -182,29 +182,24 @@ export default class SceneLightManager extends Component {
         const single = this._singleShadowMapSize; // in px
         const byEdge = max / single;
         const count = this.shadowMapCameras.length;
-        const lxc = count % byEdge; // element count of last row
-        const yc = (count - lxc) / byEdge; // row count
-        if (yc * single > max) {
+        let size = count === 0? 0 : Math.pow(2,Math.ceil(Math.log2(Math.ceil(Math.sqrt(count))))) * single;
+        if (size > max) {
             throw new Error("Max shadow map buffer size overflow");
         }
-        let xLength = lxc * single;
-        if (yc !== 0) {
-            xLength = max;
-        }
-        if (lxc === 0 && yc === 0) {
+        if (count === 0) {
           this._shadowMapTexture.update(0,1,1,0,WebGLRenderingContext.RGB,WebGLRenderingContext.UNSIGNED_BYTE);
           this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,1,1);
         } else {
-            this._shadowMapTexture.update(0, xLength, (yc + 1) * single, 0, WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE);
-            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,xLength, (yc + 1) * single);
+            this._shadowMapTexture.update(0, size, size, 0, WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE);
+            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,size,size);
         }
-        this.lightMatrices = new Float32Array(count * 16);
-        this._shadowMapElementCounts = new Vector2(xLength / single,yc + 1);
+        const matCount = Math.pow(2,Math.ceil(Math.log2(count)));
+        this.lightMatrices = new Float32Array(matCount * 16);
+        this._shadowMapElementCounts = new Vector2(size/single,size/single);
         this._updateLightMatricesTexture();
         this._lightSceneDesc.shadowMap = {
-          size:single / max,
           shadowMapCountPerEdge:this._shadowMapElementCounts,
-          count:count,
+          count:matCount,
           shadowMap:this._shadowMapTexture,
           lightMatrices:this._lightMatricesTexture,
           pixelSize:1.0 / this._singleShadowMapSize
@@ -213,6 +208,6 @@ export default class SceneLightManager extends Component {
 
     private _updateLightMatricesTexture():void{
       const count = this.shadowMapCameras.length;
-      this._lightMatricesTexture.update(0,4,count,0,WebGLRenderingContext.RGBA,WebGLRenderingContext.FLOAT,this.lightMatrices);
+      this._lightMatricesTexture.update(0,4,Math.pow(2,Math.ceil(Math.log2(count))),0,WebGLRenderingContext.RGBA,WebGLRenderingContext.FLOAT,this.lightMatrices);
     }
 }

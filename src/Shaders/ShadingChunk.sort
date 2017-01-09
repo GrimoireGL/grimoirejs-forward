@@ -56,7 +56,7 @@
   uniform vec3 _sLightColor[POINT_LIGHT_COUNT];
 
   @SPOT_LIGHT_PARAMS
-  uniform vec3 _sLightParam[POINT_LIGHT_COUNT];
+  uniform vec4 _sLightParam[POINT_LIGHT_COUNT];
 #endif
 
 #ifdef USE_SHADOW_MAP
@@ -148,13 +148,13 @@
 
 uniform float smT;
   bool isUVRegion(vec2 uv){
-    return all(bvec4(greaterThanEqual(uv,vec2(0,0)),lessThanEqual(uv,vec2(1,1))));
+    return all(bvec4(greaterThan(uv,vec2(0,0)),lessThan(uv,vec2(1,1))));
   }
 
   vec2 correctUV(vec2 uv,float index){
     float i = fract(index / _shadowMapElementCount.x) * _shadowMapElementCount.x;
     float j = (index - i) / _shadowMapElementCount.x;
-    return vec2((i + uv.x)/_shadowMapElementCount.x,uv.y);
+    return vec2((i + uv.x)/_shadowMapElementCount.x,(j + uv.y)/_shadowMapElementCount.y);
   }
 
   float shadowCoefficient(vec3 fragPosition,highp mat4 lightMatrix,float index){
@@ -165,13 +165,13 @@ uniform float smT;
     vec2 bUV = lPos.xy / lPos.w / 2.0 + vec2(0.5);
     highp float od = (lPos.z/lPos.w + 1.0)/2.0;
     float fill = 0.0;
-    float N = 0.00001;
+    float N = 0.;
     // PCF sampling
     vec2 lUV = bUV;
     if(isUVRegion(lUV)){
       highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
-      fill += 2. * step(shadowBias,od-d);
-      N+=2.0;
+      fill += step(shadowBias,od-d);
+      N++;
     }
     lUV = bUV + vec2(_shadowMapPixelSize,0);
     if(isUVRegion(lUV)){
@@ -197,7 +197,10 @@ uniform float smT;
       fill += step(shadowBias,od-d);
       N++;
     }
-    return max(0.0,1.0 - fill/N);
+    if(N > 4.0){
+      return 1.0 - fill/N;
+    }
+    return 1.0;
   }
 
   highp vec4 fromLightMatrices(vec2 uv){
@@ -224,6 +227,11 @@ uniform float smT;
         if(_dLightParams[i].x >= 0.0){
           highp mat4 lMat = fetchLightMatrix(_dLightParams[i].x);
           sc = shadowCoefficient(fragPosition,lMat,_dLightParams[i].x);
+          // highp vec4 lp = lMat * vec4(fragPosition,1.0);
+          // vec2 ouv = lp.xy / 2.0 + vec2(0.5);
+          // if(isUVRegion(ouv)){
+          //   return texture2D(_shadowMapTexture,correctUV(ouv,1.0)).rgb;
+          // }
         }
       #endif
       vec3 lColor = sc * lI * PBR_BRDF(baseColor,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,roughness);
