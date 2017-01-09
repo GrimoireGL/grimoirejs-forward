@@ -1,3 +1,4 @@
+import Vector2 from "grimoirejs-math/ref/Vector2";
 import Texture2D from "grimoirejs-fundamental/ref/Resource/Texture2D";
 import ISpotLightInfo from "./ISpotLightInfo";
 import IPointLightInfo from "./IPointLightInfo";
@@ -8,7 +9,7 @@ interface LightsInfoDesc {
     spot: ISpotLightInfo;
     shadowMap: {
         size: number;
-        xCount: number;
+        shadowMapCountPerEdge: Vector2;
         pixelSize: number;
         count: number;
         shadowMap: Texture2D;

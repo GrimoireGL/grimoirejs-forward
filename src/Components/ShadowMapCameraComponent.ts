@@ -15,9 +15,9 @@ export default class ShadowMapCameraComponent extends CameraComponent {
 
     public $awake(): void {
         this.Near = 0.01;
-        this.Far = 100.0;
+        this.Far = 50.0;
         this.OrthographicMode = true;
-        this.OrthoSize = 10;
+        this.OrthoSize = 30;
         this.AutoAspect = false;
         this.Aspect = 1.0;
     }

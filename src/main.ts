@@ -1,3 +1,4 @@
+import Vector2 from "grimoirejs-math/ref/Vector2";
 import RenderShadowMapComponent from "./Components/RenderShadowMapComponent";
 import ShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
 import LightInfoSceneDesc from "./Objects/LightInfoSceneDesc";
@@ -40,7 +41,7 @@ export default () => {
         },
         shadowMap:{
           size:0,
-          xCount:0,
+          shadowMapCountPerEdge:new Vector2(0,0),
           shadowMap:null,
           lightMatrices:null,
           pixelSize:0,

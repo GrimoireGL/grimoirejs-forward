@@ -1,3 +1,4 @@
+import Vector2 from "grimoirejs-math/ref/Vector2";
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
 import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
 import Texture2D from "../../node_modules/grimoirejs-fundamental/ref/Resource/Texture2D";
@@ -52,6 +53,8 @@ export default class SceneLightManager extends Component {
     private _lightMatricesTexture:Texture2D;
 
     private _shadowMapRenderbuffer:Renderbuffer;
+
+    private _shadowMapElementCounts:Vector2;
 
     public $awake(): void {
         this.getAttributeRaw("shadowQuality").watch(v => {
@@ -152,9 +155,9 @@ export default class SceneLightManager extends Component {
     }
 
     public viewportByShadowmapIndex(index:number):void{
-      const accumWidth = index * this._singleShadowMapSize;
-      this._gl.viewport(accumWidth % this._singleShadowMapSize
-        ,Math.floor(accumWidth/this._singleShadowMapSize)
+      const i = index % this._shadowMapElementCounts.X;
+      const j = (index - i) / this._shadowMapElementCounts.X;
+      this._gl.viewport(i * this._singleShadowMapSize,j * this._singleShadowMapSize
         ,this._singleShadowMapSize,this._singleShadowMapSize);
     }
 
@@ -176,7 +179,7 @@ export default class SceneLightManager extends Component {
      */
     private _updateShadowMapSize(): void {
         const max = this._maxTextureSize;
-        const single = this._singleShadowMapSize;
+        const single = this._singleShadowMapSize; // in px
         const byEdge = max / single;
         const count = this.shadowMapCameras.length;
         const lxc = count % byEdge; // element count of last row
@@ -196,10 +199,11 @@ export default class SceneLightManager extends Component {
             this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,xLength, (yc + 1) * single);
         }
         this.lightMatrices = new Float32Array(count * 16);
+        this._shadowMapElementCounts = new Vector2(xLength / single,yc + 1);
         this._updateLightMatricesTexture();
         this._lightSceneDesc.shadowMap = {
           size:single / max,
-          xCount:xLength/single,
+          shadowMapCountPerEdge:this._shadowMapElementCounts,
           count:count,
           shadowMap:this._shadowMapTexture,
           lightMatrices:this._lightMatricesTexture,

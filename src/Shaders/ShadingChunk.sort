@@ -60,14 +60,11 @@
 #endif
 
 #ifdef USE_SHADOW_MAP
-  @SHADOW_MAP_ELEMENT_SIZE
-  uniform float _shadowmapElementSize;
+  @SHADOW_MAP_ELEMENT_COUNT
+  uniform vec2 _shadowMapElementCount;
 
   @SHADOW_MAP_PIXEL_SIZE
   uniform float _shadowMapPixelSize;
-
-  @SHADOW_MAP_X_COUNT
-  uniform int _shadowMapXCount;
 
   @SHADOW_MATRICES
   uniform sampler2D _lightMatrices;
@@ -154,42 +151,49 @@ uniform float smT;
     return all(bvec4(greaterThanEqual(uv,vec2(0,0)),lessThanEqual(uv,vec2(1,1))));
   }
 
-  float shadowCoefficient(vec3 fragPosition,highp mat4 lightMatrix){
+  vec2 correctUV(vec2 uv,float index){
+    float i = fract(index / _shadowMapElementCount.x) * _shadowMapElementCount.x;
+    float j = (index - i) / _shadowMapElementCount.x;
+    return vec2((i + uv.x)/_shadowMapElementCount.x,uv.y);
+  }
+
+  float shadowCoefficient(vec3 fragPosition,highp mat4 lightMatrix,float index){
     highp vec4 lPos = lightMatrix * vec4(fragPosition,1.0);
     if(any(bvec2(lPos.z/lPos.w > 1.0,lPos.z/lPos.w < -1.0))){
-      return 1.;
+      return 1.0;
     }
     vec2 bUV = lPos.xy / lPos.w / 2.0 + vec2(0.5);
     highp float od = (lPos.z/lPos.w + 1.0)/2.0;
     float fill = 0.0;
     float N = 0.00001;
     // PCF sampling
-    if(isUVRegion(bUV)){
-      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,bUV).rgb);
+    vec2 lUV = bUV;
+    if(isUVRegion(lUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
       fill += 2. * step(shadowBias,od-d);
       N+=2.0;
     }
-    vec2 lUV = bUV + vec2(_shadowMapPixelSize,0);
+    lUV = bUV + vec2(_shadowMapPixelSize,0);
     if(isUVRegion(lUV)){
-      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
       fill += step(shadowBias,od-d);
       N++;
     }
     lUV = bUV + vec2(-_shadowMapPixelSize,0);
     if(isUVRegion(lUV)){
-      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
       fill += step(shadowBias,od-d);
       N++;
     }
     lUV = bUV + vec2(0,_shadowMapPixelSize);
     if(isUVRegion(lUV)){
-      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
       fill += step(shadowBias,od-d);
       N++;
     }
     lUV = bUV + vec2(0,-_shadowMapPixelSize);
     if(isUVRegion(lUV)){
-      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,correctUV(lUV,index)).rgb);
       fill += step(shadowBias,od-d);
       N++;
     }
@@ -219,8 +223,7 @@ uniform float smT;
       #ifdef USE_SHADOW_MAP // Shadowmap Calculations
         if(_dLightParams[i].x >= 0.0){
           highp mat4 lMat = fetchLightMatrix(_dLightParams[i].x);
-          sc = shadowCoefficient(fragPosition,lMat);
-          highp vec4 lPos = lMat * vec4(fragPosition,1.0);
+          sc = shadowCoefficient(fragPosition,lMat,_dLightParams[i].x);
         }
       #endif
       vec3 lColor = sc * lI * PBR_BRDF(baseColor,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,roughness);
