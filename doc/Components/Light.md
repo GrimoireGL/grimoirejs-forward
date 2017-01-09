@@ -6,14 +6,14 @@
 <!-- ATTRS -->
 | 属性名 | コンバーター | デフォルト値 | その他 |
 |:------:|:------:|:------:|:------:|
-| type | String | "Directional" | なし |
+| type | String |  | `default`</br> "Directional"</br>    </br>  </br> |
 
 <!-- /ATTRS -->
 <!-- /DO NOT EDIT -->
 ### type 属性
 
  * `converter`: String
- * `defaultValue`: "Directional"
+ * `defaultValue`: 
 
 <!-- EDIT HERE(type)-->
 <!-- /EDIT HERE-->

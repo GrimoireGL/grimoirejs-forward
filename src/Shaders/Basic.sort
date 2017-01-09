@@ -73,6 +73,7 @@ varying vec4 vPosition;
 
 @Technique depth{
   @Pass{
+    @CullFace(FRONT)
   FS_PREC(highp,float)
 
   varying vec4 vPos;

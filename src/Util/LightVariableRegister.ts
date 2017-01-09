@@ -20,10 +20,12 @@ export default class LightVariableRegister {
     this._registerLightVariable("SPOT_LIGHT_COLORS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.colors.elements));
     this._registerLightVariable("SPOT_LIGHT_DIRECTIONS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.directions.elements));
     this._registerLightVariable("SPOT_LIGHT_PARAMS", (n, p, i) => p.uniformVector3Array(n, i.lights.spot.params.elements));
-    this._registerLightVariable("SHADOW_MATRICES",(n, p, i) =>p.uniformMatrixArray(n,i.lights.shadowMap.lightMatrices));
+    this._registerLightVariable("SHADOW_MATRICES",(n, p, i) =>p.uniformTexture2D(n,i.lights.shadowMap.lightMatrices));
+    this._registerLightVariable("SHADOW_MATRICES_COUNT",(n,p,i)=>p.uniformFloat(n,i.lights.shadowMap.count));
     this._registerLightVariable("SHADOW_MAP_TEXTURE",(n, p, i) =>p.uniformTexture2D(n,i.lights.shadowMap.shadowMap));
     this._registerLightVariable("SHADOW_MAP_X_COUNT",(n, p, i) =>p.uniformInt(n,i.lights.shadowMap.xCount));
     this._registerLightVariable("SHADOW_MAP_ELEMENT_SIZE",(n,p,i)=>p.uniformFloat(n,i.lights.shadowMap.size));
+    this._registerLightVariable("SHADOW_MAP_PIXEL_SIZE",(n,p,i)=>p.uniformFloat(n,i.lights.shadowMap.pixelSize));
   }
 
   private static _registerLightVariable(semantic: string, register: (name: string, proxy: UniformProxy, info: LightInfoSceneDesc) => void): void {

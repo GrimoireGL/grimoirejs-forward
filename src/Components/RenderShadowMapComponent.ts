@@ -33,7 +33,7 @@ export default class RenderShadowMapComponent extends Component {
         this._gl.clearColor(1,0,1,1);
         this._gl.clearDepth(1);
         this._gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT|WebGLRenderingContext.DEPTH_BUFFER_BIT);
-        slm.updateLightMatricies();
+        slm.updateLightMatricies(sceneCamera);
         slm.shadowMapCameras.forEach(v => {
             slm.viewportByShadowmapIndex(v.shadowMapIndex);
             v.updateContainedScene(args.loopIndex);

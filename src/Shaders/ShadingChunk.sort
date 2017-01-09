@@ -2,6 +2,7 @@
 @ReferMacro(POINT_LIGHT_COUNT,0)
 @ReferMacro(SPOT_LIGHT_COUNT,0)
 @ReferMacro(SHADOW_MAP_COUNT,0)
+@ReferMacro(OES_TEXTURE_FLOAT,)
 
 #if DIR_LIGHT_COUNT > 0
   #define USE_DIR_LIGHT
@@ -62,14 +63,23 @@
   @SHADOW_MAP_ELEMENT_SIZE
   uniform float _shadowmapElementSize;
 
+  @SHADOW_MAP_PIXEL_SIZE
+  uniform float _shadowMapPixelSize;
+
   @SHADOW_MAP_X_COUNT
   uniform int _shadowMapXCount;
 
   @SHADOW_MATRICES
-  uniform highp mat4 _lightMatrices[SHADOW_MAP_COUNT];
+  uniform sampler2D _lightMatrices;
+
+  @SHADOW_MATRICES_COUNT
+  uniform float _lightMatricesCount;
 
   @SHADOW_MAP_TEXTURE
   uniform sampler2D _shadowMapTexture;
+
+  @{default:0.01}
+  uniform float shadowBias;
 
   highp float decodeFloatRGB( vec3 rgb ) {
     return dot( rgb, vec3(1.0, 1./255.0, 1./65025.0) );
@@ -137,26 +147,80 @@
   #endif
 #ifdef USE_DIR_LIGHT
 
-@{default:0.1}
+#ifdef USE_SHADOW_MAP
+
 uniform float smT;
+  bool isUVRegion(vec2 uv){
+    return all(bvec4(greaterThanEqual(uv,vec2(0,0)),lessThanEqual(uv,vec2(1,1))));
+  }
+
+  float shadowCoefficient(vec3 fragPosition,highp mat4 lightMatrix){
+    highp vec4 lPos = lightMatrix * vec4(fragPosition,1.0);
+    if(any(bvec2(lPos.z/lPos.w > 1.0,lPos.z/lPos.w < -1.0))){
+      return 1.;
+    }
+    vec2 bUV = lPos.xy / lPos.w / 2.0 + vec2(0.5);
+    highp float od = (lPos.z/lPos.w + 1.0)/2.0;
+    float fill = 0.0;
+    float N = 0.00001;
+    // PCF sampling
+    if(isUVRegion(bUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,bUV).rgb);
+      fill += 2. * step(shadowBias,od-d);
+      N+=2.0;
+    }
+    vec2 lUV = bUV + vec2(_shadowMapPixelSize,0);
+    if(isUVRegion(lUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      fill += step(shadowBias,od-d);
+      N++;
+    }
+    lUV = bUV + vec2(-_shadowMapPixelSize,0);
+    if(isUVRegion(lUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      fill += step(shadowBias,od-d);
+      N++;
+    }
+    lUV = bUV + vec2(0,_shadowMapPixelSize);
+    if(isUVRegion(lUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      fill += step(shadowBias,od-d);
+      N++;
+    }
+    lUV = bUV + vec2(0,-_shadowMapPixelSize);
+    if(isUVRegion(lUV)){
+      highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
+      fill += step(shadowBias,od-d);
+      N++;
+    }
+    return max(0.0,1.0 - fill/N);
+  }
+
+  highp vec4 fromLightMatrices(vec2 uv){
+    return texture2D(_lightMatrices,uv);
+  }
+
+  highp mat4 fetchLightMatrix(float index){
+    float y = 1.0 / _lightMatricesCount * (index  + 0.5);
+    return mat4(
+      fromLightMatrices(vec2(0.125,y)),
+      fromLightMatrices(vec2(0.375,y)),
+      fromLightMatrices(vec2(0.625,y)),
+      fromLightMatrices(vec2(0.875,y))
+      );
+  }
+#endif
+
   vec3 directionalLight(vec3 baseColor,vec3 fragNormal,vec3 fragPosition,float roughness){
     vec3 result = vec3(0,0,0);
     for(int i = 0; i < DIR_LIGHT_COUNT;i++){
       vec3 lI = lambert(fragNormal,-_dLightDir[i]) * _dLightColor[i];
       float sc = 1.0;
-      #ifdef USE_SHADOW_MAP
+      #ifdef USE_SHADOW_MAP // Shadowmap Calculations
         if(_dLightParams[i].x >= 0.0){
-          int shadowIndex = int(_dLightParams[i].x);
-          highp mat4 lMat = _lightMatrices[0];
-          highp vec4 lPosW = lMat * vec4(fragPosition,1.0);
-          vec2 lUV = lPosW.xy/lPosW.w / 2.0 + vec2(0.5);
-          if(all(bvec4(greaterThanEqual(lUV,vec2(0,0)),lessThanEqual(lUV,vec2(1,1))))){ // ignore out of uv
-            highp float d = decodeFloatRGB(texture2D(_shadowMapTexture,lUV).rgb);
-            highp float od = (lPosW.z/lPosW.w + 1.0)/2.0;
-            if(d < od){
-              sc = 0.0;
-            }
-          }
+          highp mat4 lMat = fetchLightMatrix(_dLightParams[i].x);
+          sc = shadowCoefficient(fragPosition,lMat);
+          highp vec4 lPos = lMat * vec4(fragPosition,1.0);
         }
       #endif
       vec3 lColor = sc * lI * PBR_BRDF(baseColor,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal,roughness);

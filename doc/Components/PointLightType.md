@@ -6,30 +6,38 @@
 <!-- ATTRS -->
 | 属性名 | コンバーター | デフォルト値 | その他 |
 |:------:|:------:|:------:|:------:|
-| color | Color3 | "white" | なし |
-| distance | Number | 5.0 | なし |
-| decay | Number | 2.0 | なし |
+| color | Color3 |  | `default`</br> "white"</br>    </br> |
+| distance | Number |  | `default`</br> 5.0</br>    </br> |
+| decay | Number |  | `default`</br> 2.0</br>    </br> |
+| intensity | Number |  | `default`</br>1</br>    </br>  </br> |
 
 <!-- /ATTRS -->
 <!-- /DO NOT EDIT -->
 ### color 属性
 
  * `converter`: Color3
- * `defaultValue`: "white"
+ * `defaultValue`: 
 
 <!-- EDIT HERE(color)-->
 <!-- /EDIT HERE-->
 ### distance 属性
 
  * `converter`: Number
- * `defaultValue`: 5.0
+ * `defaultValue`: 
 
 <!-- EDIT HERE(distance)-->
 <!-- /EDIT HERE-->
 ### decay 属性
 
  * `converter`: Number
- * `defaultValue`: 2.0
+ * `defaultValue`: 
 
 <!-- EDIT HERE(decay)-->
+<!-- /EDIT HERE-->
+### intensity 属性
+
+ * `converter`: Number
+ * `defaultValue`: 
+
+<!-- EDIT HERE(intensity)-->
 <!-- /EDIT HERE-->

@@ -42,7 +42,9 @@ export default () => {
           size:0,
           xCount:0,
           shadowMap:null,
-          lightMatrices:null
+          lightMatrices:null,
+          pixelSize:0,
+          count:0
         }
       };
     });
@@ -61,6 +63,6 @@ export default () => {
     g.componentDeclarations.get("MaterialContainer").attributes["material"].default = "new(basic)";
     g.registerNode("light", ["Transform", "Light"]);
     LightVariableRegister.registerAll();
-    GLExtRequestor.request("OES_texture_float", true);
+    GLExtRequestor.request("OES_texture_float");
   });
 }

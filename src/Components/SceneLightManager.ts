@@ -1,3 +1,4 @@
+import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
 import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
 import Texture2D from "../../node_modules/grimoirejs-fundamental/ref/Resource/Texture2D";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
@@ -48,6 +49,8 @@ export default class SceneLightManager extends Component {
 
     private _shadowMapTexture: Texture2D;
 
+    private _lightMatricesTexture:Texture2D;
+
     private _shadowMapRenderbuffer:Renderbuffer;
 
     public $awake(): void {
@@ -59,6 +62,9 @@ export default class SceneLightManager extends Component {
     public $mount(): void {
         this._gl = this.companion.get("gl");
         this._shadowMapTexture = new Texture2D(this._gl);
+        this._lightMatricesTexture = new Texture2D(this._gl);
+        this._lightMatricesTexture.magFilter = WebGLRenderingContext.NEAREST;
+        this._lightMatricesTexture.minFilter = WebGLRenderingContext.NEAREST;
         this._shadowMapRenderbuffer  = new Renderbuffer(this._gl);
         this._maxTextureSize = this._gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE);
         this._shadingManager = this.node.getComponentInAncesotor(ForwardShadingManager);
@@ -152,13 +158,17 @@ export default class SceneLightManager extends Component {
         ,this._singleShadowMapSize,this._singleShadowMapSize);
     }
 
-    public updateLightMatricies():void{
+    public updateLightMatricies(camera:CameraComponent):void{
+      this.shadowMapCameras.forEach(v=>{
+        v.updateCamera(camera);
+      });
       this.shadowMapCameras.forEach((v,i)=>{
         const pv = v.ProjectionViewMatrix.rawElements;
         for(let j = 0; j < 16; j++){
           this.lightMatrices[16 * i + j] = pv[j];
         }
       });
+      this._updateLightMatricesTexture();
     }
 
     /**
@@ -186,11 +196,19 @@ export default class SceneLightManager extends Component {
             this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,xLength, (yc + 1) * single);
         }
         this.lightMatrices = new Float32Array(count * 16);
+        this._updateLightMatricesTexture();
         this._lightSceneDesc.shadowMap = {
           size:single / max,
           xCount:xLength/single,
+          count:count,
           shadowMap:this._shadowMapTexture,
-          lightMatrices:this.lightMatrices
+          lightMatrices:this._lightMatricesTexture,
+          pixelSize:1.0 / this._singleShadowMapSize
         };
+    }
+
+    private _updateLightMatricesTexture():void{
+      const count = this.shadowMapCameras.length;
+      this._lightMatricesTexture.update(0,4,count,0,WebGLRenderingContext.RGBA,WebGLRenderingContext.FLOAT,this.lightMatrices);
     }
 }
