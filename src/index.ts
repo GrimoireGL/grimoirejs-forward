@@ -17,7 +17,7 @@
   import __INTERFACE__5 from "./Objects/LightInfoSceneDesc";
   import __INTERFACE__6 from "./Objects/LightsInfoDesc";
 
-var __VERSION__ = "1.3.0-beta2";
+var __VERSION__ = "1.3.1";
 var __NAME__ = "grimoirejs-forward-shading";
 
 import __MAIN__ from "./main";

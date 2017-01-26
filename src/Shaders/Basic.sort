@@ -1,5 +1,6 @@
 @Technique default{
 @Pass{
+@BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
 FS_PREC(mediump,float)
 
 varying vec3 vNormal;
@@ -57,7 +58,9 @@ varying vec4 vPosition;
     vec4 lastColor = vec4(0,0,0,albedo.a);
     vec3 dBaseColor = albedo.rgb;
     if(useTexture){
-      dBaseColor = pow(texture2D(texture,vTexCoord).rgb,vec3(2.2));
+      vec4 texColor = texture2D(texture,vTexCoord);
+      dBaseColor = pow(texColor.rgb,vec3(2.2));
+      lastColor.a = texColor.a;
     }
     float r = roughness;
     if(useRoughnessMap){
@@ -66,6 +69,7 @@ varying vec4 vPosition;
     lastColor.rgb += emission + shading(dBaseColor,vNormal,vPosition.xyz/vPosition.w,r);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
+    gl_FragColor.a = lastColor.a;
   }
 #endif
 }
