@@ -43,7 +43,8 @@ export default class RenderShadowMapComponent extends Component {
                 layer: "default",
                 viewport: args.viewport,
                 loopIndex: args.loopIndex,
-                technique: "depth"
+                technique: "depth",
+                renderer:this._renderSceneComponent
             });
         });
         this._gl.flush();

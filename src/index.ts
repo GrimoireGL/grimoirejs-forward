@@ -6,6 +6,7 @@
   import ComponentsRenderShadowMapComponent from "./Components/RenderShadowMapComponent";
   import ComponentsSceneLightManager from "./Components/SceneLightManager";
   import ComponentsShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
+  import ComponentsSpotLightShadowMapCameraComponent from "./Components/SpotLightShadowMapCameraComponent";
   import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
   import UtilLightVariableRegister from "./Util/LightVariableRegister";
   import UtilVectorArrayContainer from "./Util/VectorArrayContainer";
@@ -16,10 +17,10 @@
   import __INTERFACE__5 from "./Objects/LightInfoSceneDesc";
   import __INTERFACE__6 from "./Objects/LightsInfoDesc";
 
-var __VERSION__ = "1.2.0-beta1";
+var __VERSION__ = "1.3.0-beta2";
 var __NAME__ = "grimoirejs-forward-shading";
 
-import __MAIN__ from "./main"
+import __MAIN__ from "./main";
 
 var __EXPOSE__ = {
   "Components": {
@@ -31,6 +32,7 @@ var __EXPOSE__ = {
     "RenderShadowMapComponent": ComponentsRenderShadowMapComponent,
     "SceneLightManager": ComponentsSceneLightManager,
     "ShadowMapCameraComponent": ComponentsShadowMapCameraComponent,
+    "SpotLightShadowMapCameraComponent": ComponentsSpotLightShadowMapCameraComponent,
     "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
   },
   "Util": {

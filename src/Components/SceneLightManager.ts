@@ -70,7 +70,7 @@ export default class SceneLightManager extends Component {
         this._lightMatricesTexture.minFilter = WebGLRenderingContext.NEAREST;
         this._shadowMapRenderbuffer  = new Renderbuffer(this._gl);
         this._maxTextureSize = this._gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE);
-        this._shadingManager = this.node.getComponentInAncesotor(ForwardShadingManager);
+        this._shadingManager = this.node.getComponentInAncestor(ForwardShadingManager);
         const scene = this.node.getComponent(SceneComponent);
         this._lightSceneDesc = (scene.sceneDescription as LightInfoSceneDesc).lights;
         this._shadingManager.addSceneLightManager(this);
