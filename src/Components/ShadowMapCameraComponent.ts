@@ -3,7 +3,7 @@ import Vector3 from "grimoirejs-math/ref/Vector3";
 import Texture2D from "grimoirejs-fundamental/ref/Resource/Texture2D";
 import SceneLightManager from "./SceneLightManager";
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
-import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
+import Framebuffer from "grimoirejs-fundamental/ref/Resource/FrameBuffer";
 import AABB from "grimoirejs-math/ref/AABB";
 export default class ShadowMapCameraComponent extends CameraComponent {
 

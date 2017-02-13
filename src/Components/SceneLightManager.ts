@@ -1,6 +1,6 @@
 import Vector2 from "grimoirejs-math/ref/Vector2";
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
-import Framebuffer from "grimoirejs-fundamental/ref/Resource/Framebuffer";
+import Framebuffer from "grimoirejs-fundamental/ref/Resource/FrameBuffer";
 import Texture2D from "../../node_modules/grimoirejs-fundamental/ref/Resource/Texture2D";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
 import ShadowMapCamera from "./ShadowMapCameraComponent";
