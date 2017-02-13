@@ -2,7 +2,7 @@
 @Pass{
 @BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
 FS_PREC(mediump,float)
-
+#define SIMPLE_SHADING
 varying vec3 vNormal;
 varying vec2 vTexCoord;
 varying vec4 vPosition;
@@ -32,41 +32,32 @@ varying vec4 vPosition;
   @HAS_TEXTURE{sampler:"texture"}
   uniform bool useTexture;
 
-  uniform sampler2D roughnessMap;
-
-  @HAS_TEXTURE{sampler:"roughnessMap"}
-  uniform bool useRoughnessMap;
-
   @{default:"white",type:"color"}
-  uniform vec4 albedo;
+  uniform vec4 diffuse;
 
-  @{default:0.1}
-  uniform float roughness;
-
-  @{default:0.99}
-  uniform float refractive;
+  @{default:0.3}
+  uniform float shiningness;
 
   @{default:"black",type:"color"}
   uniform vec3 emission;
 
-  @{default:0.3}
+  @{default:"white",type:"color"}
+  uniform vec3 specular;
+
+  @{default:0.5}
   uniform float specularRatio;
 
   @import "forward-shading"
 
   void main(){
-    vec4 lastColor = vec4(0,0,0,albedo.a);
-    vec3 dBaseColor = albedo.rgb;
+    vec4 lastColor = vec4(0,0,0,diffuse.a);
+    vec3 dBaseColor = diffuse.rgb;
     if(useTexture){
       vec4 texColor = texture2D(texture,vTexCoord);
       dBaseColor = pow(texColor.rgb,vec3(2.2));
       lastColor.a = texColor.a;
     }
-    float r = roughness;
-    if(useRoughnessMap){
-      r = texture2D(roughnessMap,vTexCoord).r;
-    }
-    BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,r,refractive,specularRatio);
+    BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,specular,shiningness,specularRatio);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction

@@ -62,7 +62,6 @@ export default () => {
     g.overrideDeclaration("scene",["SceneLightManager"]);
     g.overrideDeclaration("render-scene",["RenderShadowMap"]);
     g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
-    g.componentDeclarations.get("MaterialContainer").attributes["material"].default = "new(basic)";
     g.registerNode("light", ["Transform", "Light"]);
     LightVariableRegister.registerAll();
     GLExtRequestor.request("OES_texture_float");

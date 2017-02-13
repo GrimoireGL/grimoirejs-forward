@@ -34,7 +34,7 @@ export default class SceneLightManager extends Component {
 
     public lightMatrices: Float32Array;
 
-    public shadowMapFBO:Framebuffer;
+    public shadowMapFBO: Framebuffer;
 
     public shadowQuality: number;
 
