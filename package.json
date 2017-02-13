@@ -48,9 +48,9 @@
   },
   "dependencies": {
     "babel-core": "^6.22.1",
-    "grimoirejs": "^0.14.7",
-    "grimoirejs-fundamental": "^0.12.8",
-    "grimoirejs-math": "^1.12.1"
+    "grimoirejs": "latest",
+    "grimoirejs-fundamental": "latest",
+    "grimoirejs-math": "latest"
   },
   "release": {
     "verifyConditions": "condition-circle"
