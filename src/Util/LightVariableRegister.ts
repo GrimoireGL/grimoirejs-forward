@@ -3,8 +3,8 @@ import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import UniformProxy from "grimoirejs-fundamental/ref/Resource/UniformProxy";
 import ImportResolver from "grimoirejs-fundamental/ref/Sort/ImportResolver";
 import UniformResolverRegistry from "grimoirejs-fundamental/ref/Material/UniformResolverRegistry";
-import ShadingChunk from "raw!../Shaders/ShadingChunk.sort";
-import Basic from "raw!../Shaders/Basic.sort";
+import ShadingChunk from "raw-loader!../Shaders/ShadingChunk.sort";
+import Basic from "raw-loader!../Shaders/Basic.sort";
 
 export default class LightVariableRegister {
   public static registerAll(): void {

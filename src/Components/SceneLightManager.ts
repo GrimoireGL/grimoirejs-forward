@@ -9,7 +9,7 @@ import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent
 import LightInfoDesc from "../Objects/LightsInfoDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import ForwardShadingManager from "./ForwardShadingManagerComponent";
-import Renderbuffer from "grimoirejs-fundamental/ref/Resource/Renderbuffer";
+import Renderbuffer from "grimoirejs-fundamental/ref/Resource/RenderBuffer";
 import Component from "grimoirejs/ref/Node/Component";
 export default class SceneLightManager extends Component {
 

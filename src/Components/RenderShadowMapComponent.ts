@@ -30,9 +30,9 @@ export default class RenderShadowMapComponent extends Component {
             return;
         }
         slm.shadowMapFBO.bind();
-        this._gl.clearColor(0,0,0,0);
+        this._gl.clearColor(0, 0, 0, 0);
         this._gl.clearDepth(1);
-        this._gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT|WebGLRenderingContext.DEPTH_BUFFER_BIT);
+        this._gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
         slm.updateLightMatricies(sceneCamera);
         slm.shadowMapCameras.forEach(v => {
             slm.viewportByShadowmapIndex(v.shadowMapIndex);
@@ -44,10 +44,11 @@ export default class RenderShadowMapComponent extends Component {
                 viewport: args.viewport,
                 loopIndex: args.loopIndex,
                 technique: "depth",
-                renderer:this._renderSceneComponent
+                renderer: this._renderSceneComponent,
+                sceneDescription: {}
             });
         });
         this._gl.flush();
-        this._gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER,null);
+        this._gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
     }
 }
