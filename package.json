@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GrimoireGL/grimoirejs-forward.git"
+    "url": "https://github.com/GrimoireGL/grimoirejs-forward-shading.git"
   },
   "keywords": [
     "grimoire"
@@ -22,9 +22,9 @@
   "author": "GrimoireGL",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GrimoireGL/grimoirejs-forward/issues"
+    "url": "https://github.com/GrimoireGL/grimoirejs-forward-shading/issues"
   },
-  "homepage": "https://github.com/GrimoireGL/grimoirejs-forward#readme",
+  "homepage": "https://github.com/GrimoireGL/grimoirejs-forward-shading#readme",
   "typings": "./ref/index.d.ts",
   "files": [
     "src",
