@@ -1,4 +1,6 @@
 # forward
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/GrimoireGL/grimoirejs-forward-shading.svg)](https://greenkeeper.io/)
 > Forward lighting package for grimoire.js
 
 Describe about this package here.
