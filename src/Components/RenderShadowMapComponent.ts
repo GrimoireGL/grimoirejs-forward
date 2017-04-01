@@ -24,7 +24,7 @@ export default class RenderShadowMapComponent extends Component {
     }
 
     public $render(args: IRenderRendererMessage): void {
-        const sceneCamera = args.camera ? args.camera : this._renderSceneComponent.camera;
+        const sceneCamera = this._renderSceneComponent.camera ? this._renderSceneComponent.camera : args.camera;
         const slm = sceneCamera.containedScene.node.getComponent(SceneLightManager);
         if (slm.shadowMapCameras.length === 0) {
             return;
