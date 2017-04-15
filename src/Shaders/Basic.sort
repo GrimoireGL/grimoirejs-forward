@@ -40,17 +40,14 @@ varying vec4 vPosition;
   @{default:"white",type:"color"}
   uniform vec4 albedo;
 
-  @{default:0.1}
+  @{default:1.0}
   uniform float roughness;
 
   @{default:0.99}
-  uniform float refractive;
+  uniform float metalic;
 
   @{default:"black",type:"color"}
   uniform vec3 emission;
-
-  @{default:0.3}
-  uniform float specularRatio;
 
   @import "forward-shading"
 
@@ -64,9 +61,12 @@ varying vec4 vPosition;
     }
     float r = roughness;
     if(useRoughnessMap){
-      r = texture2D(roughnessMap,vTexCoord).r;
+      r *= texture2D(roughnessMap,vTexCoord).r;
     }
-    BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,r,refractive,specularRatio);
+    vec3 dielectricSpecular = vec3(0.04);
+    vec3 diffuse = mix(dBaseColor.rgb * (1. - dielectricSpecular.r),vec3(0),metalic);
+    vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metalic);
+    BRDF_PARAMS param = BRDF_PARAMS(diffuse,f0,roughness);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction

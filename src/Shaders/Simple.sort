@@ -57,7 +57,7 @@ varying vec4 vPosition;
       dBaseColor = pow(texColor.rgb,vec3(2.2));
       lastColor.a = texColor.a;
     }
-    BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,specular,shiningness,specularRatio);
+    BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,specular,shiningness);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
     gl_FragColor = lastColor;
     gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
