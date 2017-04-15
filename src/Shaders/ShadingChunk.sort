@@ -48,16 +48,16 @@
 #ifdef USE_SPOT_LIGHT
 
   @SPOT_LIGHT_POSITIONS
-  uniform vec3 _sLightPosition[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightPosition[SPOT_LIGHT_COUNT];
 
   @SPOT_LIGHT_DIRECTIONS
-  uniform vec3 _sLightDir[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightDir[SPOT_LIGHT_COUNT];
 
   @SPOT_LIGHT_COLORS
-  uniform vec3 _sLightColor[POINT_LIGHT_COUNT];
+  uniform vec3 _sLightColor[SPOT_LIGHT_COUNT];
 
   @SPOT_LIGHT_PARAMS
-  uniform vec4 _sLightParam[POINT_LIGHT_COUNT];
+  uniform vec4 _sLightParam[SPOT_LIGHT_COUNT];
 #endif
 
 #ifdef USE_SHADOW_MAP
