@@ -36,16 +36,16 @@ export default class RenderShadowMapComponent extends Component {
         slm.updateLightMatricies(sceneCamera);
         slm.shadowMapCameras.forEach(v => {
             slm.viewportByShadowmapIndex(v.shadowMapIndex);
-            v.updateContainedScene(args.loopIndex);
+            v.updateContainedScene(args.timer);
             v.renderScene({
                 camera: v,
                 buffers: null,
                 layer: "default",
                 viewport: args.viewport,
-                loopIndex: args.loopIndex,
                 technique: "depth",
                 renderer: this._renderSceneComponent,
-                sceneDescription: {}
+                sceneDescription: {},
+                timer: args.timer
             });
         });
         this._gl.flush();
