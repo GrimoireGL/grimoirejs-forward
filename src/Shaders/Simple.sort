@@ -7,10 +7,22 @@ varying vec3 vNormal;
 varying vec2 vTexCoord;
 varying vec4 vPosition;
 
+#ifdef ATTRIBUTE_COLOR_ENABLED
+varying vec4 vColor;
+#endif
+
 #ifdef VS
   attribute vec3 position;
   attribute vec3 normal;
+
+  #ifdef ATTRIBUTE_TEXCOORD_ENABLED
   attribute vec2 texCoord;
+  #endif
+
+  #ifdef ATTRIBUTE_COLOR_ENABLED
+  @COLOR
+  attribute vec4 color;
+  #endif
 
   uniform mat4 _matPVM;
   uniform mat4 _matM;
@@ -19,7 +31,16 @@ varying vec4 vPosition;
     gl_Position = _matPVM * vec4(position,1.0);
     vNormal = normalize((_matM * vec4(normal,0.0)).xyz);
     vPosition = (_matM * vec4(position,1.0));
+    #ifndef ATTRIBUTE_TEXCOORD_ENABLED
+    vTexCoord = position.xy / 2.0 + vec2(0.5);
+    #endif
+    #ifdef ATTRIBUTE_TEXCOORD_ENABLED
     vTexCoord = texCoord;
+    #endif
+    #ifdef ATTRIBUTE_COLOR_ENABLED
+    vColor = color;
+    #endif
+
   }
 #endif
 
@@ -52,6 +73,9 @@ varying vec4 vPosition;
   void main(){
     vec4 lastColor = vec4(0,0,0,diffuse.a);
     vec3 dBaseColor = diffuse.rgb;
+    #ifdef ATTRIBUTE_COLOR_ENABLED
+    dBaseColor.rgb *= vColor.rgb;
+    #endif
     if(useTexture){
       vec4 texColor = texture2D(texture,vTexCoord);
       dBaseColor = pow(texColor.rgb,vec3(2.2));
@@ -59,9 +83,11 @@ varying vec4 vPosition;
     }
     BRDF_PARAMS param = BRDF_PARAMS(dBaseColor,specular,shiningness);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
-    gl_FragColor = lastColor;
-    gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
+    gl_FragColor.rgb = pow(lastColor.rgb,vec3(1.0/2.2)); // Gamma correction
     gl_FragColor.a = lastColor.a;
+    #ifdef ATTRIBUTE_COLOR_ENABLED
+    gl_FragColor.a *= vColor.a;
+    #endif
   }
 #endif
 }
