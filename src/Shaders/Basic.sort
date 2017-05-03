@@ -14,7 +14,9 @@ varying vec4 vColor;
 #ifdef VS
   attribute vec3 position;
   attribute vec3 normal;
+  #ifdef ATTRIBUTE_TEXCOORD_ENABLED
   attribute vec2 texCoord;
+  #endif
   #ifdef ATTRIBUTE_COLOR_ENABLED
   @COLOR
   attribute vec4 color;
@@ -27,7 +29,12 @@ varying vec4 vColor;
     gl_Position = _matPVM * vec4(position,1.0);
     vNormal = normalize((_matM * vec4(normal,0.0)).xyz);
     vPosition = (_matM * vec4(position,1.0));
+    #ifndef ATTRIBUTE_TEXCOORD_ENABLED
+    vTexCoord = position.xy / 2.0 + vec2(0.5);
+    #endif
+    #ifdef ATTRIBUTE_TEXCOORD_ENABLED
     vTexCoord = texCoord;
+    #endif
     #ifdef ATTRIBUTE_COLOR_ENABLED
     vColor = color;
     #endif
@@ -64,13 +71,14 @@ varying vec4 vColor;
 
   void main(){
     vec3 dBaseColor = albedo.rgb;
+    vec4 lastColor = vec4(0,0,0,albedo.a);
     #ifdef ATTRIBUTE_COLOR_ENABLED
     dBaseColor *= vColor.rgb;
     #endif
     if(useTexture){
       vec4 texColor = texture2D(texture,vTexCoord);
       dBaseColor = pow(texColor.rgb,vec3(2.2));
-      lastColor.a = texColor.a;
+      lastColor.a *= texColor.a;
     }
     float r = roughness;
     if(useRoughnessMap){
@@ -81,7 +89,7 @@ varying vec4 vColor;
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metalic);
     BRDF_PARAMS param = BRDF_PARAMS(diffuse,f0,roughness);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
-    gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1.0/2.2)); // Gamma correction
+    gl_FragColor.rgb = pow(lastColor.rgb,vec3(1.0/2.2)); // Gamma correction
     gl_FragColor.a = albedo.a;
     #ifdef ATTRIBUTE_COLOR_ENABLED
     gl_FragColor.a *= vColor.a;
