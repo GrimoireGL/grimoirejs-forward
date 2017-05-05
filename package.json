@@ -44,7 +44,7 @@
     "ts-loader": "^2.0.3",
     "typescript": "^2.3.2",
     "webpack": "^2.4.1",
-    "yargs": "^7.1.0"
+    "yargs": "^8.0.1"
   },
   "dependencies": {
     "babel-core": "^6.24.1",
