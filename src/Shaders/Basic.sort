@@ -87,7 +87,7 @@ varying vec4 vColor;
     vec3 dielectricSpecular = vec3(0.04);
     vec3 diffuse = mix(dBaseColor.rgb * (1. - dielectricSpecular.r),vec3(0),metalic);
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metalic);
-    BRDF_PARAMS param = BRDF_PARAMS(diffuse,f0,roughness);
+    pbr_params param = pbr_params(diffuse,f0,roughness*roughness,roughness);
     lastColor.rgb += emission + shading(param,vNormal,vPosition.xyz/vPosition.w);
     gl_FragColor.rgb = pow(lastColor.rgb,vec3(1.0/2.2)); // Gamma correction
     gl_FragColor.a = albedo.a;
