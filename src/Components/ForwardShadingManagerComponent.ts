@@ -36,8 +36,8 @@ export default class ForwardShadingManagerComponent extends Component {
         this._macroRegistry.setValue("SHADOW_MAP_COUNT", "0");
         MaterialFactory.addSORTMaterial("basic-shading", Basic);
         MaterialFactory.addSORTMaterial("simple-shading", Simple);
-        const defaultShader = this.getAttribute("useHighQualityShading") ? "basic-shading" : "simple-shading";
-        MaterialContainer.rewriteDefaultMaterial(defaultShader);
+        //const defaultShader = this.getAttribute("useHighQualityShading") ? "basic-shading" : "simple-shading";
+        MaterialContainer.rewriteDefaultMaterial("basic-shading");
     }
 
     public addSceneLightManager(s: SceneLightManager): void {
