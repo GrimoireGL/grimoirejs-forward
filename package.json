@@ -38,7 +38,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "condition-circle": "^1.5.0",
-    "grimoirejs-cauldron": "^2.3.3",
+    "grimoirejs-cauldron": "^3.0.0",
     "raw-loader": "^0.5.1",
     "semantic-release": "^6.3.2",
     "ts-loader": "^2.0.3",
