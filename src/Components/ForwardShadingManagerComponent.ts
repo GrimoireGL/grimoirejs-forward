@@ -7,15 +7,10 @@ import MaterialContainer from "grimoirejs-fundamental/ref/Components/MaterialCon
 
 
 import Basic from "raw-loader!../Shaders/Basic.sort";
-import Simple from "raw-loader!../Shaders/Simple.sort";
 
 
 export default class ForwardShadingManagerComponent extends Component {
     public static attributes: { [key: string]: IAttributeDeclaration } = {
-        useHighQualityShading: {
-            converter: "Boolean",
-            default: false
-        }
     };
 
     private static _typeToMacros: { [key: string]: string } = {
@@ -35,8 +30,6 @@ export default class ForwardShadingManagerComponent extends Component {
         this._macroRegistry.setValue("SPOT_LIGHT_COUNT", "0");
         this._macroRegistry.setValue("SHADOW_MAP_COUNT", "0");
         MaterialFactory.addSORTMaterial("basic-shading", Basic);
-        MaterialFactory.addSORTMaterial("simple-shading", Simple);
-        //const defaultShader = this.getAttribute("useHighQualityShading") ? "basic-shading" : "simple-shading";
         MaterialContainer.rewriteDefaultMaterial("basic-shading");
     }
 
