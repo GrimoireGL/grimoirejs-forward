@@ -206,23 +206,25 @@ vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
           sc = shadowCoefficient(fragPosition,lMat,_dLightParams[i].x);
         }
       #endif
-      vec3 lColor = sc * lI * BRDF(param,_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal);
+      vec3 lColor = sc * lI * BRDF(param,-_dLightDir[i],normalize(_cameraPosition - fragPosition),fragNormal);
       result += lColor;
     }
     return result;
   }
 #endif
 #ifdef USE_POINT_LIGHT
+// BRDF arguments
+// param,(normalized fragment to light verctor),(normalized fragment to camera vector), fragment position
   vec3 pointLight(pbr_params param,vec3 fragNormal,vec3 fragPosition){
     vec3 result = vec3(0,0,0);
     for(int i = 0; i < POINT_LIGHT_COUNT;i++){
-      vec3 l2p = _pLightPosition[i] - fragPosition;
-      float d = length(l2p);
+      vec3 p2l = _pLightPosition[i] - fragPosition;
+      float d = length(p2l);
       vec2 lightParam = _pLightParam[i];
       float atten = max(0.,1.0-d/lightParam.x)/(1.0 + lightParam.y*lightParam.y*d);
-      l2p = normalize(l2p);
-      vec3 lI = lambert(fragNormal,l2p)* _pLightColor[i] * atten;
-      vec3 lColor = lI  * BRDF(param,-l2p,normalize(_cameraPosition - fragPosition),fragNormal);
+      p2l = normalize(p2l);
+      vec3 lI = lambert(fragNormal,p2l)* _pLightColor[i] * atten;
+      vec3 lColor = lI  * BRDF(param,p2l,normalize(_cameraPosition - fragPosition),fragNormal);
       result += lColor ;
     }
     return result;
@@ -239,7 +241,7 @@ vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
 
       vec3 p2l = _sLightPosition[i] - fragPosition;
       float d = length(p2l);
-      p2l=p2l/d;
+      p2l=normalize(p2l);
       float c = dot(-p2l,normalize(_sLightDir[i]));
       float decay = _sLightParam[i].z;//減衰係数
       decay = 1.;
@@ -249,7 +251,7 @@ vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
       float angleDecayCoefficient = pow(clamp((c-outCos)/(innCos-outCos),0.0,1.0),angleDecay);
       //
       vec3 lI = lambert(p2l,fragNormal)*_sLightColor[i]*angleDecayCoefficient*distDecayCoefficient;
-      vec3 lColor = lI * BRDF(param,-p2l,normalize(_cameraPosition - fragPosition),fragNormal);
+      vec3 lColor = lI * BRDF(param,p2l,normalize(_cameraPosition - fragPosition),fragNormal);
       result += lColor;
     }
     return result;
