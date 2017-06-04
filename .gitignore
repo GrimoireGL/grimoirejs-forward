@@ -118,4 +118,4 @@ register
 # Only if you want to import js file from typescript(NOT RECOMMENDED, the ideal method is what separate them as packages and use them as dependency),you should remove the line below.
 src/**/*.js
 yarn.lock
-index.ts
+src/index.ts
