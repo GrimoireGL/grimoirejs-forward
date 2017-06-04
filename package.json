@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "babel-core": "^6.24.1",
-    "grimoirejs": "^0.15.4",
+    "grimoirejs": "^0.16.0",
     "grimoirejs-fundamental": "^0.18.0",
     "grimoirejs-math": "^1.12.7"
   },
