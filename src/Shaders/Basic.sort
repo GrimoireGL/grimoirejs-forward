@@ -69,6 +69,8 @@ varying vec4 vColor;
 
   @import "forward-shading"
 
+
+
   void main(){
     vec3 dBaseColor = albedo.rgb;
     vec4 lastColor = vec4(0,0,0,albedo.a);
