@@ -61,7 +61,7 @@ export default () => {
         g.registerComponent("SpotLightShadowMapCamera", SpotLightShadowMapCameraComponent);
         g.overrideDeclaration("scene", ["SceneLightManager"]);
         g.overrideDeclaration("render-scene", ["RenderShadowMap"]);
-        g.nodeDeclarations.get("goml").defaultComponents.push(g.ns("http://grimoire.gl/ns/default")("ForwardShadingManager"));
+        g.overrideDeclaration("goml",["ForwardShadingManager"]);
         g.registerNode("light", ["Transform", "Light"]);
         LightVariableRegister.registerAll();
         GLExtRequestor.request("OES_texture_float");

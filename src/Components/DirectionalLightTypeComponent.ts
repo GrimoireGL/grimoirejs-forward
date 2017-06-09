@@ -3,6 +3,7 @@ import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
 import TransformComponent from "grimoirejs-fundamental/ref/Components/TransformComponent";
+import ISceneUpdateArgument from "grimoirejs-fundamental/ref/SceneRenderer/ISceneUpdateArgument";
 import Vector3 from "grimoirejs-math/ref/Vector3";
 import Color3 from "grimoirejs-math/ref/Color3";
 export default class DirectionalLightTypeComponent extends LightTypeComponentBase {
@@ -37,7 +38,8 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
     this._transform = this.node.getComponent("Transform") as TransformComponent;
   }
 
-  public $update(sceneDesc: LightInfoSceneDesc): void {
+  public $update(args: ISceneUpdateArgument): void {
+    const sceneDesc = args.sceneDescription as LightInfoSceneDesc;
     const directionals = sceneDesc.lights.directional;
     const index = this.__ensureIndex(directionals);
     const d = this._transform.forward;

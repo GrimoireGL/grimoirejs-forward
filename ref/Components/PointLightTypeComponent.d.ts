@@ -1,6 +1,6 @@
-import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import ISceneUpdateArgument from "grimoirejs-fundamental/ref/SceneRenderer/ISceneUpdateArgument";
 export default class PointLightTypeComponent extends LightTypeComponentBase {
     static attributes: {
         [key: string]: IAttributeDeclaration;
@@ -11,5 +11,5 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
     private _decay;
     private _intensity;
     $awake(): void;
-    $update(sceneDesc: LightInfoSceneDesc): void;
+    $update(args: ISceneUpdateArgument): void;
 }
