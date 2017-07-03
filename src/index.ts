@@ -1,4 +1,3 @@
-import gr from "grimoirejs";
 import ComponentsDirectionalLightTypeComponent from "./Components/DirectionalLightTypeComponent";
 import ComponentsForwardShadingManagerComponent from "./Components/ForwardShadingManagerComponent";
 import ComponentsLightComponent from "./Components/LightComponent";
@@ -36,6 +35,7 @@ let __EXPOSE__ = {
   }
 };
 
+import gr from "grimoirejs";
 gr.notifyRegisteringPlugin(__NAME__);
 let __BASE__ = __MAIN__();
 

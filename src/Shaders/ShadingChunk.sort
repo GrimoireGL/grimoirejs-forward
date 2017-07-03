@@ -268,5 +268,5 @@ vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
     #ifdef USE_SPOT_LIGHT
     lightingColor.rgb += spotLight(params,fragNormal,fragPosition);
     #endif
-    return lightingColor;
+    return min(vec3(1.0),lightingColor);
   }
