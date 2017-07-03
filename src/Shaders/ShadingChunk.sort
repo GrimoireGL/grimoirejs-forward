@@ -118,7 +118,7 @@ vec3 cookTorranceBRDF(pbr_params param,vec3 l,vec3 v,vec3 n){
 }
 
 vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
-  return params.diffuseColor/PI + cookTorranceBRDF(params,li,lo,n);
+  return max(0.0,params.diffuseColor/PI + cookTorranceBRDF(params,li,lo,n));
 }
 #ifdef USE_DIR_LIGHT
 
@@ -268,5 +268,5 @@ vec3 BRDF(pbr_params params,vec3 li,vec3 lo,vec3 n){
     #ifdef USE_SPOT_LIGHT
     lightingColor.rgb += spotLight(params,fragNormal,fragPosition);
     #endif
-    return lightingColor;
+    return max(1.0,lightingColor);
   }
