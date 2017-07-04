@@ -44,16 +44,10 @@ varying vec4 vColor;
 #ifdef FS
   @CAMERA_POSITION
   uniform vec3 _cameraPosition;
-
+  @{flag:"USE_TEXTURE"}
   uniform sampler2D texture;
-
-  @HAS_TEXTURE{sampler:"texture"}
-  uniform bool useTexture;
-
+  @{flag:"USE_ROUGHNESS_TEXTURE"}
   uniform sampler2D roughnessMap;
-
-  @HAS_TEXTURE{sampler:"roughnessMap"}
-  uniform bool useRoughnessMap;
 
   @{default:"white",type:"color"}
   uniform vec4 albedo;
@@ -77,15 +71,15 @@ varying vec4 vColor;
     #ifdef ATTRIBUTE_COLOR_ENABLED
     dBaseColor *= vColor.rgb;
     #endif
-    if(useTexture){
+    #ifdef USE_TEXTURE
       vec4 texColor = texture2D(texture,vTexCoord);
       dBaseColor = pow(texColor.rgb,vec3(2.2));
       lastColor.a *= texColor.a;
-    }
+    #endif
     float r = roughness;
-    if(useRoughnessMap){
+    #ifdef USE_ROUGHNESS_TEXTURE
       r *= texture2D(roughnessMap,vTexCoord).r;
-    }
+    #endif
     vec3 dielectricSpecular = vec3(0.04);
     vec3 diffuse = mix(dBaseColor.rgb * (1. - dielectricSpecular.r),vec3(0),metalic);
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metalic);
