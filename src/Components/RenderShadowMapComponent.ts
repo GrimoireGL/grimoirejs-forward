@@ -45,7 +45,8 @@ export default class RenderShadowMapComponent extends Component {
                 technique: "depth",
                 renderer: this._renderSceneComponent,
                 sceneDescription: {},
-                timer: args.timer
+                timer: args.timer,
+                sortingTechnique:"default"
             });
         });
         this._gl.flush();

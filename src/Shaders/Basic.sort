@@ -3,8 +3,8 @@
 @BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
 FS_PREC(mediump,float)
 
-varying vec3 normalize(;
-varyi)ng vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec2 vTexCoord;
 varying vec4 vPosition;
 
 #ifdef ATTRIBUTE_COLOR_ENABLED
@@ -85,8 +85,7 @@ varying vec4 vColor;
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metallic);
     pbr_params param = pbr_params(diffuse,f0,roughness*roughness,roughness);
     lastColor.rgb += emission + shading(param,normalize(vNormal),vPosition.xyz/vPosition.w);
-    gl_FragColor.rgb = lastColor.rgb;
-    gl_FragColor.a = albedo.a;
+    gl_FragColor = lastColor;
     #ifdef ATTRIBUTE_COLOR_ENABLED
     gl_FragColor.a *= vColor.a;
     #endif
