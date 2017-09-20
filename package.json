@@ -11,6 +11,9 @@
     "generate-reference": "cauldron generate-reference --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
+  "engines": {
+    "node": ">=8"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/GrimoireGL/grimoirejs-forward-shading.git"
@@ -46,10 +49,10 @@
     "yargs": "^8.0.2"
   },
   "dependencies": {
-    "babel-core": "^6.25.0",
-    "grimoirejs": "^0.19.1",
-    "grimoirejs-fundamental": "^0.26.0",
-    "grimoirejs-math": "^1.14.2"
+    "babel-core": "^6.26.0",
+    "grimoirejs": "^0.20.1",
+    "grimoirejs-fundamental": "^0.29.4",
+    "grimoirejs-math": "^1.14.8"
   },
   "release": {
     "verifyConditions": "condition-circle"
