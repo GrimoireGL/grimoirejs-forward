@@ -85,7 +85,7 @@ varying vec4 vColor;
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metallic);
     pbr_params param = pbr_params(diffuse,f0,roughness*roughness,roughness);
     lastColor.rgb += emission + shading(param,normalize(vNormal),vPosition.xyz/vPosition.w);
-    gl_FragColor.rgb = lastColor;
+    gl_FragColor.rgb = lastColor.rgb;
     gl_FragColor.a = albedo.a;
     #ifdef ATTRIBUTE_COLOR_ENABLED
     gl_FragColor.a *= vColor.a;
