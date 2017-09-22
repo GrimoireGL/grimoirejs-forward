@@ -63,7 +63,8 @@ varying vec4 vColor;
 
   @import "forward-shading"
 
-
+  const float c_minRoughness = 0.04;
+  // TODO https://github.com/KhronosGroup/glTF-WebGL-PBR/issues/23
 
   void main(){
     vec3 dBaseColor = albedo.rgb;
@@ -80,10 +81,11 @@ varying vec4 vColor;
     #ifdef USE_ROUGHNESS_TEXTURE
       r *= texture2D(roughnessMap,vTexCoord).r;
     #endif
+    r = max(c_minRoughness,r);
     vec3 dielectricSpecular = vec3(0.04);
     vec3 diffuse = mix(dBaseColor.rgb * (1. - dielectricSpecular.r),vec3(0),metallic);
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metallic);
-    pbr_params param = pbr_params(diffuse,f0,roughness*roughness,roughness);
+    pbr_params param = pbr_params(diffuse,f0,r*r,r);
     lastColor.rgb += emission + shading(param,normalize(vNormal),vPosition.xyz/vPosition.w);
     gl_FragColor = lastColor;
     #ifdef ATTRIBUTE_COLOR_ENABLED
