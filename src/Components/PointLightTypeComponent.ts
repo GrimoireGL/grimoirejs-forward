@@ -52,8 +52,9 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
     const points = sceneDesc.lights.point;
     const index = this.__ensureIndex(points);
     const pos = this._transform.globalPosition;
+    const intensity = this._intensity * Math.PI;
     points.positions.set(index,pos.X,pos.Y,pos.Z);
-    points.colors.set(index,this._color.R * this._intensity,this._color.G * this._intensity,this._color.B * this._intensity)
+    points.colors.set(index,this._color.R * intensity,this._color.G * intensity,this._color.B * intensity)
     points.params.set(index,this._distance,this._decay);
   }
 }

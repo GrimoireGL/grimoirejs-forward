@@ -66,8 +66,9 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     const index = this.__ensureIndex(spots);
     const pos = this._transform.globalPosition;
     const dir = this._transform.up.negateThis();
+    const intensity = this._intensity * Math.PI;
     spots.positions.set(index,pos.X,pos.Y,pos.Z);
-    spots.colors.set(index,this._color.R * this._intensity,this._color.G * this._intensity,this._color.B * this._intensity);
+    spots.colors.set(index,this._color.R * intensity,this._color.G * intensity,this._color.B * intensity);
     spots.directions.set(index,dir.X,dir.Y,dir.Z);
     spots.params.set(index,this._innerCone,this._outerCone,this._decay,this._shadowCamera? this._shadowCamera.shadowMapIndex:-1);
   }

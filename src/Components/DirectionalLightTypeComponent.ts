@@ -44,9 +44,10 @@ export default class DirectionalLightTypeComponent extends LightTypeComponentBas
     const index = this.__ensureIndex(directionals);
     const d = this._transform.forward;
     const p = this._transform.globalPosition;
+    const intensity = this._intensity * Math.PI;
     directionals.directions.set(index,d.X,d.Y,d.Z);
     const c = this._color;
-    directionals.colors.set(index,c.R * this._intensity ,c.G * this._intensity,c.B * this._intensity);
+    directionals.colors.set(index,c.R * intensity ,c.G * intensity,c.B * intensity);
     directionals.params.set(index,this._shadowCamera ? this._shadowCamera.shadowMapIndex : -1,p.X,p.Y,p.Z);
   }
 
