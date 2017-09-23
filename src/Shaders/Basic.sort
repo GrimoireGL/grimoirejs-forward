@@ -74,7 +74,7 @@ varying vec4 vColor;
     #endif
     #ifdef USE_TEXTURE
       vec4 texColor = texture2D(texture,vTexCoord);
-      dBaseColor = texColor.rgb
+      dBaseColor = texColor.rgb;
       lastColor.a *= texColor.a;
     #endif
     float r = roughness;
