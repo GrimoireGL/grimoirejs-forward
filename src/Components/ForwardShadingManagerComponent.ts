@@ -24,7 +24,7 @@ export default class ForwardShadingManagerComponent extends Component {
     private _macroRegistry: MacroRegistry;
 
     public $awake(): void {
-        this._macroRegistry = (this.companion.get("MaterialFactory") as MaterialFactory).macro;
+        this._macroRegistry = MaterialFactory.get(this.companion.get("gl")).macro;
         this._macroRegistry.setValue("DIR_LIGHT_COUNT", "0");
         this._macroRegistry.setValue("POINT_LIGHT_COUNT", "0");
         this._macroRegistry.setValue("SPOT_LIGHT_COUNT", "0");
