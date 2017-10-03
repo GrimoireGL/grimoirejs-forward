@@ -5,7 +5,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -110,8 +111,8 @@ lib-ts
 lib-test
 lib-md
 
-ref
-register
+ref/
+register/
 
 # If you are using atom-typescript without any configuration, that plugin would generate js files in ts folder.
 # To prevent conflict by this files, any js files included src folder would be ignored.

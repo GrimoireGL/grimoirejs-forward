@@ -39,12 +39,12 @@ export default class RenderShadowMapComponent extends Component {
             v.updateContainedScene(args.timer);
             v.renderScene({
                 camera: v,
-                buffers: null,
                 layer: "default",
                 viewport: args.viewport,
                 technique: "depth",
                 renderer: this._renderSceneComponent,
                 sceneDescription: {},
+                rendererDescription:{},
                 timer: args.timer,
                 sortingTechnique:"default"
             });
