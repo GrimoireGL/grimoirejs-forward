@@ -1,3 +1,2 @@
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});exports.default=window.GrimoireJS.lib.forward_shading.Components.DirectionalLightTypeComponent;
+Object.defineProperty(exports,"__esModule",{value: true});
+exports.default=window.GrimoireJS&&window.GrimoireJS.lib.forward_shading?window.GrimoireJS.lib.forward_shading.Components.DirectionalLightTypeComponent:undefined;
