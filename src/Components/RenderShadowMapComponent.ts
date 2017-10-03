@@ -3,7 +3,7 @@ import IRenderRendererMessage from "grimoirejs-fundamental/ref/Messages/IRenderR
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
 import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
 import Component from "grimoirejs/ref/Node/Component";
-import RenderScene from "grimoirejs-fundamental/ref/Components/RenderSceneComponent";
+import RenderScene from "grimoirejs-fundamental/ref/Components/RenderStage/RenderSceneComponent";
 
 export default class RenderShadowMapComponent extends Component {
     public static attributes: { [key: string]: IAttributeDeclaration } = {
@@ -39,12 +39,12 @@ export default class RenderShadowMapComponent extends Component {
             v.updateContainedScene(args.timer);
             v.renderScene({
                 camera: v,
-                buffers: null,
                 layer: "default",
                 viewport: args.viewport,
                 technique: "depth",
                 renderer: this._renderSceneComponent,
                 sceneDescription: {},
+                rendererDescription:{},
                 timer: args.timer,
                 sortingTechnique:"default"
             });
