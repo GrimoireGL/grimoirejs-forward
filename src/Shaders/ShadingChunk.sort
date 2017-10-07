@@ -108,7 +108,7 @@ float ctg_GGX_SingleGeometryTerm(pbr_params param,vec3 n,vec3 v){
 
 vec3 ctf_Schlick(pbr_params param,vec3 l,vec3 v,vec3 n,vec3 h){
   vec3 f0 = param.f0;
-  float vh = dot(v,n);
+  float vh = dot(v,h);
   return f0 + pow(1.0-vh,5.0) * (vec3(1.0) - f0);
 }
 
