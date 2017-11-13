@@ -11,8 +11,8 @@ import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponen
 import UtilLightVariableRegister from "./Util/LightVariableRegister";
 import UtilVectorArrayContainer from "./Util/VectorArrayContainer";
 
-let __VERSION__ = "0.0.0-development";
-let __NAME__ = "grimoirejs-forward-shading";
+export const __VERSION__ = "0.0.0-development";
+export const __NAME__ = "grimoirejs-forward-shading";
 
 import __MAIN__ from "./main";
 

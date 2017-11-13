@@ -1,6 +1,7 @@
 @Technique default{
 @Pass{
 @BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
+@DynamicState(dynamic-cull)
 FS_PREC(mediump,float)
 
 varying vec3 vNormal;
