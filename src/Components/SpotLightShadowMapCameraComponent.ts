@@ -1,8 +1,8 @@
 import ShadowMapCameraComponent from "./ShadowMapCameraComponent";
-export default class SpotLightShadowMapCameraComponent extends ShadowMapCameraComponent{
+export default class SpotLightShadowMapCameraComponent extends ShadowMapCameraComponent {
 
-  public $awake():void{
+  public $awake(): void {
     super.$awake();
-    this.OrthographicMode = false;
+    this.orthogonal = false;
   }
 }

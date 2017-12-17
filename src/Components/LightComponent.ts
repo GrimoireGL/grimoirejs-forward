@@ -1,6 +1,6 @@
 import LightTypeComponentBase from "./LightTypeComponentBase";
-import Component from "grimoirejs/ref/Node/Component";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import Component from "grimoirejs/ref/Core/Component";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
 
 export default class LightComponent extends Component {
   public static attributes: { [key: string]: IAttributeDeclaration } = {
@@ -16,7 +16,7 @@ export default class LightComponent extends Component {
    */
   private _lastLightType: string;
 
-  private _lightTypeComponent:LightTypeComponentBase;
+  private _lightTypeComponent: LightTypeComponentBase;
 
   public $awake(): void {
     this.getAttributeRaw("type").watch((v) => this._onLightTypeChanged(v), true);
@@ -52,8 +52,8 @@ export default class LightComponent extends Component {
     }
   }
 
-  private _removeLastTypeComponent():void{
-    if(this._lightTypeComponent){
+  private _removeLastTypeComponent(): void {
+    if (this._lightTypeComponent) {
       this._lightTypeComponent.dispose();
     }
   }

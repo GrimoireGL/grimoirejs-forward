@@ -3,24 +3,24 @@ import SceneLightManager from "./SceneLightManager";
 import ILightInfo from "../Objects/ILightInfo";
 import LightsInfoDesc from "../Objects/LightsInfoDesc";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
-import Component from "grimoirejs/ref/Node/Component";
+import Component from "grimoirejs/ref/Core/Component";
 export default class LightTypeComponentBase extends Component {
-  public lightType:string;
+  public lightType: string;
 
-  protected __sceneLightManager:SceneLightManager;
+  protected __sceneLightManager: SceneLightManager;
 
-  protected __lightDesc:LightsInfoDesc;
+  protected __lightDesc: LightsInfoDesc;
 
-  protected __lightIndex:number;
+  protected __lightIndex: number;
 
-  public $mount():void{
+  public $mount(): void {
     this.__sceneLightManager = this.node.getComponentInAncestor(SceneLightManager);
     const sceneDesc = this.__sceneLightManager.node.getComponent(SceneComponent).sceneDescription as LightInfoSceneDesc;
     this.__lightDesc = sceneDesc.lights;
     this.__sceneLightManager.addLight(this);
   }
 
-  public $unmount():void{
+  public $unmount(): void {
     this.__sceneLightManager.removeLight(this);
   }
 

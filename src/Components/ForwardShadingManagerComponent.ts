@@ -1,7 +1,7 @@
 import SceneLightManager from "./SceneLightManager";
 import MacroRegistry from "grimoirejs-fundamental/ref/Material/MacroRegistory";
-import Component from "grimoirejs/ref/Node/Component";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import Component from "grimoirejs/ref/Core/Component";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
 import MaterialFactory from "grimoirejs-fundamental/ref/Material/MaterialFactory";
 import MaterialContainer from "grimoirejs-fundamental/ref/Components/MaterialContainerComponent";
 

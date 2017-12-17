@@ -50,9 +50,9 @@
   },
   "dependencies": {
     "babel-core": "^6.26.0",
-    "grimoirejs": "^0.20.2",
-    "grimoirejs-fundamental": "^0.30.5",
-    "grimoirejs-math": "^1.15.1"
+    "grimoirejs": "beta",
+    "grimoirejs-fundamental": "beta",
+    "grimoirejs-math": "beta"
   },
   "release": {
     "verifyConditions": "condition-circle"
