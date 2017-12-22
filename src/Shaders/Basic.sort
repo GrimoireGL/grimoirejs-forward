@@ -2,6 +2,7 @@
 @Pass{
 @BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
 @DynamicState(dynamic-cull)
+#extension GL_EXT_shader_texture_lod : enable
 FS_PREC(mediump,float)
 
 varying vec3 vNormal;
@@ -86,7 +87,7 @@ varying vec4 vColor;
     vec3 dielectricSpecular = vec3(0.04);
     vec3 diffuse = mix(dBaseColor.rgb * (1. - dielectricSpecular.r),vec3(0),metallic);
     vec3 f0 = mix(dielectricSpecular,dBaseColor.rgb,metallic);
-    pbr_params param = pbr_params(diffuse,f0,r*r,r);
+    pbr_params param = pbr_params(dBaseColor.rgb,diffuse,f0,r*r,r,metallic);
     lastColor.rgb += emission + shading(param,normalize(vNormal),vPosition.xyz/vPosition.w);
     gl_FragColor = lastColor;
     #ifdef ATTRIBUTE_COLOR_ENABLED

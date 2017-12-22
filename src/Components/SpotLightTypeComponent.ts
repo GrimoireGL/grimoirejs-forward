@@ -1,4 +1,3 @@
-import SpotLightShadowMapCameraComponent from "./SpotLightShadowMapCameraComponent";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
@@ -7,6 +6,7 @@ import ISceneUpdateArgument from "grimoirejs-fundamental/ref/SceneRenderer/IScen
 import Vector3 from "grimoirejs-math/ref/Vector3";
 import Color3 from "grimoirejs-math/ref/Color3";
 export default class SpotLightTypeComponent extends LightTypeComponentBase {
+  public static componentName = "SpotLight";
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",
@@ -46,8 +46,6 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
 
   private _intensity: number;
 
-  private _shadowCamera: SpotLightShadowMapCameraComponent;
-
   public $awake(): void {
     this.lightType = "spot";
     this.getAttributeRaw("color").bindTo("_color");
@@ -70,15 +68,15 @@ export default class SpotLightTypeComponent extends LightTypeComponentBase {
     spots.positions.set(index, pos.X, pos.Y, pos.Z);
     spots.colors.set(index, this._color.R * intensity, this._color.G * intensity, this._color.B * intensity);
     spots.directions.set(index, dir.X, dir.Y, dir.Z);
-    spots.params.set(index, this._innerCone, this._outerCone, this._decay, this._shadowCamera ? this._shadowCamera.shadowMapIndex : -1);
+    spots.params.set(index, this._innerCone, this._outerCone, this._decay, -1);
   }
 
   private _useShadowChanged(v: boolean): void {
-    if (!v && this._shadowCamera) {
-      this._shadowCamera.dispose();
-      this._shadowCamera = null;
-    } else if (v) {
-      this._shadowCamera = this.node.addComponent("SpotLightShadowMapCamera") as any as SpotLightShadowMapCameraComponent;
-    }
+    // if (!v && this._shadowCamera) {
+    //   this._shadowCamera.dispose();
+    //   this._shadowCamera = null;
+    // } else if (v) {
+    //   this._shadowCamera = this.node.addComponent("SpotLightShadowMapCamera") as any as SpotLightShadowMapCameraComponent;
+    // }
   }
 }

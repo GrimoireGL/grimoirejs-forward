@@ -7,6 +7,7 @@
     "start": "webpack --watch --progress",
     "prepublish": "npm run build -- --env.prod",
     "build": "webpack --progress",
+    "debug": "node ./common/debug.js",
     "generate-expose": "cauldron generate-exposure --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref",
     "generate-reference": "cauldron generate-reference --src ./src --dest ./src/index.ts --ts --main ./src/main.ts --dts ./ref",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"

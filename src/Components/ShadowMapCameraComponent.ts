@@ -6,7 +6,7 @@ import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraCompone
 import Framebuffer from "grimoirejs-fundamental/ref/Resource/FrameBuffer";
 import AABB from "grimoirejs-math/ref/AABB";
 export default class ShadowMapCameraComponent extends CameraComponent {
-
+    public static componentName = "ShadowMapCamera";
     public shadowMapIndex: number;
 
     private _sceneAABBCache: AABB = new AABB();

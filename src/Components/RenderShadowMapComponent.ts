@@ -6,6 +6,7 @@ import Component from "grimoirejs/ref/Core/Component";
 import RenderScene from "grimoirejs-fundamental/ref/Components/RenderStage/RenderSceneComponent";
 
 export default class RenderShadowMapComponent extends Component {
+    public static componentName = "RenderShadowMap";
     public static attributes: { [key: string]: IAttributeDeclaration } = {
 
     };
@@ -38,7 +39,7 @@ export default class RenderShadowMapComponent extends Component {
         // slm.shadowMapCameras.forEach(v => {
         //     slm.viewportByShadowmapIndex(v.shadowMapIndex);
         //     v.updateContainedScene(args.timer);
-        //     v.renderScene({
+        //     v.renderScene({ ]
         //         camera: v,
         //         layer: "default",
         //         viewport: args.viewport,

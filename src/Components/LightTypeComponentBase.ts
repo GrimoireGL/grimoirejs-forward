@@ -5,6 +5,7 @@ import LightsInfoDesc from "../Objects/LightsInfoDesc";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import Component from "grimoirejs/ref/Core/Component";
 export default class LightTypeComponentBase extends Component {
+  public static componentName = "LightTypeComponentBase";
   public lightType: string;
 
   protected __sceneLightManager: SceneLightManager;

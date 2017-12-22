@@ -7,6 +7,7 @@ import ISceneUpdateArgument from "grimoirejs-fundamental/ref/SceneRenderer/IScen
 import Vector3 from "grimoirejs-math/ref/Vector3";
 import Color3 from "grimoirejs-math/ref/Color3";
 export default class DirectionalLightTypeComponent extends LightTypeComponentBase {
+  public static componentName = "DirectionalLight";
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",

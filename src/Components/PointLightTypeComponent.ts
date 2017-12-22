@@ -9,6 +9,7 @@ import Color3 from "grimoirejs-math/ref/Color3";
 
 
 export default class PointLightTypeComponent extends LightTypeComponentBase {
+  public static componentName = "PointLight";
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",

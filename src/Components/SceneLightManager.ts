@@ -12,7 +12,7 @@ import ForwardShadingManager from "./ForwardShadingManagerComponent";
 import Renderbuffer from "grimoirejs-fundamental/ref/Resource/RenderBuffer";
 import Component from "grimoirejs/ref/Core/Component";
 export default class SceneLightManager extends Component {
-
+    public static componentName = "SceneLightManager";
     public static attributes: { [key: string]: IAttributeDeclaration } = {
         shadowQuality: {
             converter: "Number",
@@ -23,11 +23,13 @@ export default class SceneLightManager extends Component {
     public lights: {
         point: LightTypeComponentBase[],
         directional: LightTypeComponentBase[],
-        spot: LightTypeComponentBase[]
+        spot: LightTypeComponentBase[],
+        ambient: LightTypeComponentBase[]
     } = {
             point: [],
             directional: [],
-            spot: []
+            spot: [],
+            ambient: []
         };
 
     public shadowMapCameras: ShadowMapCamera[] = [];
@@ -108,7 +110,7 @@ export default class SceneLightManager extends Component {
                 this._lightSceneDesc.spot.params.incrementLength();
                 break;
         }
-        this._shadingManager.updateLightCount();
+        this._shadingManager.updateLightProperty();
     }
 
     public removeLight(light: LightTypeComponentBase): void {
@@ -136,7 +138,7 @@ export default class SceneLightManager extends Component {
                 this._lightSceneDesc.spot.params.decrementLength();
                 break;
         }
-        this._shadingManager.updateLightCount();
+        this._shadingManager.updateLightProperty();
     }
 
     public addShadowMapCamera(smCamera: ShadowMapCamera): void {
