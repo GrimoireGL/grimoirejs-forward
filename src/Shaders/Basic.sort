@@ -2,7 +2,7 @@
 @Pass{
 @BlendFunc(SRC_ALPHA,ONE_MINUS_SRC_ALPHA)
 @DynamicState(dynamic-cull)
-#extension GL_EXT_shader_texture_lod : enable
+@Extension(EXT_shader_texture_lod)
 FS_PREC(mediump,float)
 
 varying vec3 vNormal;
