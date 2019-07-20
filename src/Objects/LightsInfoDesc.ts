@@ -3,16 +3,18 @@ import Texture2D from "grimoirejs-fundamental/ref/Resource/Texture2D";
 import ISpotLightInfo from "./ISpotLightInfo";
 import IPointLightInfo from "./IPointLightInfo";
 import IDirectionalLightInfo from "./IDirectionalLightInfo";
+import IAmbientLightInfo from "./IAmbientLightInfo";
 interface LightsInfoDesc {
   directional: IDirectionalLightInfo,
   point: IPointLightInfo,
   spot: ISpotLightInfo,
-  shadowMap:{
-    shadowMapCountPerEdge:Vector2,
-    pixelSize:number,
-    count:number,
-    shadowMap:Texture2D,
-    lightMatrices:Texture2D;
+  ambient: IAmbientLightInfo,
+  shadowMap: {
+    shadowMapCountPerEdge: Vector2,
+    pixelSize: number,
+    count: number,
+    shadowMap: Texture2D,
+    lightMatrices: Texture2D;
   }
 }
 

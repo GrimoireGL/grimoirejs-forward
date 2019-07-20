@@ -1,7 +1,7 @@
 import SceneLightManager from "./SceneLightManager";
 import MacroRegistry from "grimoirejs-fundamental/ref/Material/MacroRegistory";
-import Component from "grimoirejs/ref/Node/Component";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import Component from "grimoirejs/ref/Core/Component";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
 import MaterialFactory from "grimoirejs-fundamental/ref/Material/MaterialFactory";
 import MaterialContainer from "grimoirejs-fundamental/ref/Components/MaterialContainerComponent";
 
@@ -10,6 +10,7 @@ import Basic from "raw-loader!../Shaders/Basic.sort";
 
 
 export default class ForwardShadingManagerComponent extends Component {
+    public static componentName = "ForwardShadingManager";
     public static attributes: { [key: string]: IAttributeDeclaration } = {
     };
 
@@ -35,16 +36,16 @@ export default class ForwardShadingManagerComponent extends Component {
 
     public addSceneLightManager(s: SceneLightManager): void {
         this._sceneLightManagers.push(s);
-        this.updateLightCount();
+        this.updateLightProperty();
     }
 
     public removeSceneLightManager(s: SceneLightManager): void {
         const o = this._sceneLightManagers.indexOf(s);
         this._sceneLightManagers.splice(o, 1);
-        this.updateLightCount();
+        this.updateLightProperty();
     }
 
-    public updateLightCount(): void {
+    public updateLightProperty(): void {
         let d = 0, s = 0, p = 0, sm = 0;
         for (let i = 0; i < this._sceneLightManagers.length; i++) {
             const slm = this._sceneLightManagers[i];

@@ -2,7 +2,7 @@ import Vector2 from "grimoirejs-math/ref/Vector2";
 import CameraComponent from "grimoirejs-fundamental/ref/Components/CameraComponent";
 import Framebuffer from "grimoirejs-fundamental/ref/Resource/FrameBuffer";
 import Texture2D from "../../node_modules/grimoirejs-fundamental/ref/Resource/Texture2D";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
 import ShadowMapCamera from "./ShadowMapCameraComponent";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent";
@@ -10,9 +10,9 @@ import LightInfoDesc from "../Objects/LightsInfoDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
 import ForwardShadingManager from "./ForwardShadingManagerComponent";
 import Renderbuffer from "grimoirejs-fundamental/ref/Resource/RenderBuffer";
-import Component from "grimoirejs/ref/Node/Component";
+import Component from "grimoirejs/ref/Core/Component";
 export default class SceneLightManager extends Component {
-
+    public static componentName = "SceneLightManager";
     public static attributes: { [key: string]: IAttributeDeclaration } = {
         shadowQuality: {
             converter: "Number",
@@ -23,12 +23,14 @@ export default class SceneLightManager extends Component {
     public lights: {
         point: LightTypeComponentBase[],
         directional: LightTypeComponentBase[],
-        spot: LightTypeComponentBase[]
+        spot: LightTypeComponentBase[],
+        ambient: LightTypeComponentBase[]
     } = {
-        point: [],
-        directional: [],
-        spot: []
-    };
+            point: [],
+            directional: [],
+            spot: [],
+            ambient: []
+        };
 
     public shadowMapCameras: ShadowMapCamera[] = [];
 
@@ -50,16 +52,16 @@ export default class SceneLightManager extends Component {
 
     private _shadowMapTexture: Texture2D;
 
-    private _lightMatricesTexture:Texture2D;
+    private _lightMatricesTexture: Texture2D;
 
-    private _shadowMapRenderbuffer:Renderbuffer;
+    private _shadowMapRenderbuffer: Renderbuffer;
 
-    private _shadowMapElementCounts:Vector2;
+    private _shadowMapElementCounts: Vector2;
 
     public $awake(): void {
         this.getAttributeRaw("shadowQuality").watch(v => {
             this._singleShadowMapSize = Math.pow(2, v);
-        },true);
+        }, true);
     }
 
     public $mount(): void {
@@ -68,7 +70,7 @@ export default class SceneLightManager extends Component {
         this._lightMatricesTexture = new Texture2D(this._gl);
         this._lightMatricesTexture.magFilter = WebGLRenderingContext.NEAREST;
         this._lightMatricesTexture.minFilter = WebGLRenderingContext.NEAREST;
-        this._shadowMapRenderbuffer  = new Renderbuffer(this._gl);
+        this._shadowMapRenderbuffer = new Renderbuffer(this._gl);
         this._maxTextureSize = this._gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE);
         this._shadingManager = this.node.getComponentInAncestor(ForwardShadingManager);
         const scene = this.node.getComponent(SceneComponent);
@@ -108,7 +110,7 @@ export default class SceneLightManager extends Component {
                 this._lightSceneDesc.spot.params.incrementLength();
                 break;
         }
-        this._shadingManager.updateLightCount();
+        this._shadingManager.updateLightProperty();
     }
 
     public removeLight(light: LightTypeComponentBase): void {
@@ -136,7 +138,7 @@ export default class SceneLightManager extends Component {
                 this._lightSceneDesc.spot.params.decrementLength();
                 break;
         }
-        this._shadingManager.updateLightCount();
+        this._shadingManager.updateLightProperty();
     }
 
     public addShadowMapCamera(smCamera: ShadowMapCamera): void {
@@ -154,24 +156,24 @@ export default class SceneLightManager extends Component {
         this._updateShadowMapSize();
     }
 
-    public viewportByShadowmapIndex(index:number):void{
-      const i = index % this._shadowMapElementCounts.X;
-      const j = (index - i) / this._shadowMapElementCounts.X;
-      this._gl.viewport(i * this._singleShadowMapSize,j * this._singleShadowMapSize
-        ,this._singleShadowMapSize,this._singleShadowMapSize);
+    public viewportByShadowmapIndex(index: number): void {
+        const i = index % this._shadowMapElementCounts.X;
+        const j = (index - i) / this._shadowMapElementCounts.X;
+        this._gl.viewport(i * this._singleShadowMapSize, j * this._singleShadowMapSize
+            , this._singleShadowMapSize, this._singleShadowMapSize);
     }
 
-    public updateLightMatricies(camera:CameraComponent):void{
-      this.shadowMapCameras.forEach(v=>{
-        v.updateCamera(camera);
-      });
-      this.shadowMapCameras.forEach((v,i)=>{
-        const pv = v.ProjectionViewMatrix.rawElements;
-        for(let j = 0; j < 16; j++){
-          this.lightMatrices[16 * i + j] = pv[j];
-        }
-      });
-      this._updateLightMatricesTexture();
+    public updateLightMatricies(camera: CameraComponent): void {
+        this.shadowMapCameras.forEach(v => {
+            v.updateCamera(camera);
+        });
+        this.shadowMapCameras.forEach((v, i) => {
+            const pv = v.projectionViewMatrix.rawElements;
+            for (let j = 0; j < 16; j++) {
+                this.lightMatrices[16 * i + j] = pv[j];
+            }
+        });
+        this._updateLightMatricesTexture();
     }
 
     /**
@@ -182,32 +184,32 @@ export default class SceneLightManager extends Component {
         const single = this._singleShadowMapSize; // in px
         const byEdge = max / single;
         const count = this.shadowMapCameras.length;
-        let size = count === 0? 0 : Math.pow(2,Math.ceil(Math.log2(Math.ceil(Math.sqrt(count))))) * single;
+        let size = count === 0 ? 0 : Math.pow(2, Math.ceil(Math.log2(Math.ceil(Math.sqrt(count))))) * single;
         if (size > max) {
             throw new Error("Max shadow map buffer size overflow");
         }
         if (count === 0) {
-          this._shadowMapTexture.update(0,1,1,0,WebGLRenderingContext.RGB,WebGLRenderingContext.UNSIGNED_BYTE);
-          this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,1,1);
+            this._shadowMapTexture.update(0, 1, 1, 0, WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE);
+            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16, 1, 1);
         } else {
             this._shadowMapTexture.update(0, size, size, 0, WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE);
-            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16,size,size);
+            this._shadowMapRenderbuffer.update(WebGLRenderingContext.DEPTH_COMPONENT16, size, size);
         }
-        const matCount = Math.pow(2,Math.ceil(Math.log2(count)));
+        const matCount = Math.pow(2, Math.ceil(Math.log2(count)));
         this.lightMatrices = new Float32Array(matCount * 16);
-        this._shadowMapElementCounts = new Vector2(size/single,size/single);
+        this._shadowMapElementCounts = new Vector2(size / single, size / single);
         this._updateLightMatricesTexture();
         this._lightSceneDesc.shadowMap = {
-          shadowMapCountPerEdge:this._shadowMapElementCounts,
-          count:matCount,
-          shadowMap:this._shadowMapTexture,
-          lightMatrices:this._lightMatricesTexture,
-          pixelSize:1.0 / this._singleShadowMapSize
+            shadowMapCountPerEdge: this._shadowMapElementCounts,
+            count: matCount,
+            shadowMap: this._shadowMapTexture,
+            lightMatrices: this._lightMatricesTexture,
+            pixelSize: 1.0 / this._singleShadowMapSize
         };
     }
 
-    private _updateLightMatricesTexture():void{
-      const count = this.shadowMapCameras.length;
-      this._lightMatricesTexture.update(0,4,Math.pow(2,Math.ceil(Math.log2(count))),0,WebGLRenderingContext.RGBA,WebGLRenderingContext.FLOAT,this.lightMatrices);
+    private _updateLightMatricesTexture(): void {
+        const count = this.shadowMapCameras.length;
+        this._lightMatricesTexture.update(0, 4, Math.pow(2, Math.ceil(Math.log2(count))), 0, WebGLRenderingContext.RGBA, WebGLRenderingContext.FLOAT, this.lightMatrices);
     }
 }

@@ -19,7 +19,6 @@
     "./src/Components/RenderShadowMapComponent.ts",
     "./src/Components/SceneLightManager.ts",
     "./src/Components/ShadowMapCameraComponent.ts",
-    "./src/Components/SpotLightShadowMapCameraComponent.ts",
     "./src/Components/SpotLightTypeComponent.ts",
     "./src/index.ts",
     "./src/main.ts",

@@ -1,8 +1,13 @@
 import LightTypeComponentBase from "./LightTypeComponentBase";
-import Component from "grimoirejs/ref/Node/Component";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import Component from "grimoirejs/ref/Core/Component";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
+import DirectionalLightTypeComponent from "./DirectionalLightTypeComponent";
+import PointLightTypeComponent from "./PointLightTypeComponent";
+import SpotLightTypeComponent from "./SpotLightTypeComponent";
+import AmbientLightTypeComponent from "./AmbientLightTypeComponent";
 
 export default class LightComponent extends Component {
+  public static componentName = "LightComponent";
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     type: {
       converter: "String",
@@ -16,7 +21,7 @@ export default class LightComponent extends Component {
    */
   private _lastLightType: string;
 
-  private _lightTypeComponent:LightTypeComponentBase;
+  private _lightTypeComponent: LightTypeComponentBase;
 
   public $awake(): void {
     this.getAttributeRaw("type").watch((v) => this._onLightTypeChanged(v), true);
@@ -41,19 +46,21 @@ export default class LightComponent extends Component {
   private _addLightTypeComponent(type: string): void {
     switch (type) {
       case "directional":
-        this._lightTypeComponent = this.node.addComponent("DirectionalLightType", {}, true) as LightTypeComponentBase;
+        this._lightTypeComponent = this.node.addComponent(DirectionalLightTypeComponent, {}, true) as LightTypeComponentBase;
         break;
       case "point":
-        this._lightTypeComponent = this.node.addComponent("PointLightType", {}, true) as LightTypeComponentBase;
+        this._lightTypeComponent = this.node.addComponent(PointLightTypeComponent, {}, true) as LightTypeComponentBase;
         break;
       case "spot":
-        this._lightTypeComponent = this.node.addComponent("SpotLightType", {}, true) as LightTypeComponentBase;
+        this._lightTypeComponent = this.node.addComponent(SpotLightTypeComponent, {}, true) as LightTypeComponentBase;
         break;
+      case "ambient":
+        this._lightTypeComponent = this.node.addComponent(AmbientLightTypeComponent, {}, true) as LightTypeComponentBase;
     }
   }
 
-  private _removeLastTypeComponent():void{
-    if(this._lightTypeComponent){
+  private _removeLastTypeComponent(): void {
+    if (this._lightTypeComponent) {
       this._lightTypeComponent.dispose();
     }
   }

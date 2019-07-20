@@ -1,7 +1,7 @@
 import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent";
 import LightInfoSceneDesc from "../Objects/LightInfoSceneDesc";
 import LightTypeComponentBase from "./LightTypeComponentBase";
-import IAttributeDeclaration from "grimoirejs/ref/Node/IAttributeDeclaration";
+import IAttributeDeclaration from "grimoirejs/ref/Interface/IAttributeDeclaration";
 import TransformComponent from "grimoirejs-fundamental/ref/Components/TransformComponent";
 import ISceneUpdateArgument from "grimoirejs-fundamental/ref/SceneRenderer/ISceneUpdateArgument";
 import Vector3 from "grimoirejs-math/ref/Vector3";
@@ -9,6 +9,7 @@ import Color3 from "grimoirejs-math/ref/Color3";
 
 
 export default class PointLightTypeComponent extends LightTypeComponentBase {
+  public static componentName = "PointLight";
   public static attributes: { [key: string]: IAttributeDeclaration } = {
     color: {
       converter: "Color3",
@@ -22,9 +23,9 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
       converter: "Number",
       default: 2.0
     },
-    intensity:{
-      converter:"Number",
-      default:1
+    intensity: {
+      converter: "Number",
+      default: 1
     }
   };
 
@@ -36,15 +37,15 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
 
   private _decay: number;
 
-  private _intensity:number;
+  private _intensity: number;
 
   public $awake(): void {
     this.lightType = "point";
-    this.getAttributeRaw("color").boundTo("_color");
+    this.getAttributeRaw("color").bindTo("_color");
     this._transform = this.node.getComponent("Transform") as TransformComponent;
-    this.getAttributeRaw("distance").boundTo("_distance");
-    this.getAttributeRaw("decay").boundTo("_decay");
-    this.getAttributeRaw("intensity").boundTo("_intensity");
+    this.getAttributeRaw("distance").bindTo("_distance");
+    this.getAttributeRaw("decay").bindTo("_decay");
+    this.getAttributeRaw("intensity").bindTo("_intensity");
   }
 
   public $update(args: ISceneUpdateArgument): void {
@@ -53,8 +54,8 @@ export default class PointLightTypeComponent extends LightTypeComponentBase {
     const index = this.__ensureIndex(points);
     const pos = this._transform.globalPosition;
     const intensity = this._intensity * Math.PI;
-    points.positions.set(index,pos.X,pos.Y,pos.Z);
-    points.colors.set(index,this._color.R * intensity,this._color.G * intensity,this._color.B * intensity)
-    points.params.set(index,this._distance,this._decay);
+    points.positions.set(index, pos.X, pos.Y, pos.Z);
+    points.colors.set(index, this._color.R * intensity, this._color.G * intensity, this._color.B * intensity)
+    points.params.set(index, this._distance, this._decay);
   }
 }

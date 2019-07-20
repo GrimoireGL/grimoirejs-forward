@@ -1,3 +1,4 @@
+import ComponentsAmbientLightTypeComponent from "./Components/AmbientLightTypeComponent";
 import ComponentsDirectionalLightTypeComponent from "./Components/DirectionalLightTypeComponent";
 import ComponentsForwardShadingManagerComponent from "./Components/ForwardShadingManagerComponent";
 import ComponentsLightComponent from "./Components/LightComponent";
@@ -6,7 +7,6 @@ import ComponentsPointLightTypeComponent from "./Components/PointLightTypeCompon
 import ComponentsRenderShadowMapComponent from "./Components/RenderShadowMapComponent";
 import ComponentsSceneLightManager from "./Components/SceneLightManager";
 import ComponentsShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
-import ComponentsSpotLightShadowMapCameraComponent from "./Components/SpotLightShadowMapCameraComponent";
 import ComponentsSpotLightTypeComponent from "./Components/SpotLightTypeComponent";
 import UtilLightVariableRegister from "./Util/LightVariableRegister";
 import UtilVectorArrayContainer from "./Util/VectorArrayContainer";
@@ -18,6 +18,7 @@ import __MAIN__ from "./main";
 
 let __EXPOSE__ = {
   "Components": {
+    "AmbientLightTypeComponent": ComponentsAmbientLightTypeComponent,
     "DirectionalLightTypeComponent": ComponentsDirectionalLightTypeComponent,
     "ForwardShadingManagerComponent": ComponentsForwardShadingManagerComponent,
     "LightComponent": ComponentsLightComponent,
@@ -26,7 +27,6 @@ let __EXPOSE__ = {
     "RenderShadowMapComponent": ComponentsRenderShadowMapComponent,
     "SceneLightManager": ComponentsSceneLightManager,
     "ShadowMapCameraComponent": ComponentsShadowMapCameraComponent,
-    "SpotLightShadowMapCameraComponent": ComponentsSpotLightShadowMapCameraComponent,
     "SpotLightTypeComponent": ComponentsSpotLightTypeComponent
   },
   "Util": {

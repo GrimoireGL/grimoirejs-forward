@@ -1,4 +1,3 @@
-import SpotLightShadowMapCameraComponent from "./Components/SpotLightShadowMapCameraComponent";
 import Vector2 from "grimoirejs-math/ref/Vector2";
 import RenderShadowMapComponent from "./Components/RenderShadowMapComponent";
 import ShadowMapCameraComponent from "./Components/ShadowMapCameraComponent";
@@ -17,6 +16,8 @@ import GLExtRequestor from "grimoirejs-fundamental/ref/Resource/GLExtRequestor";
 import MaterialFactory from "grimoirejs-fundamental/ref/Material/MaterialFactory";
 import LightVariableRegister from "./Util/LightVariableRegister";
 import SceneComponent from "grimoirejs-fundamental/ref/Components/SceneComponent";
+import AmbientLightTypeComponent from "./Components/AmbientLightTypeComponent";
+import TransformComponent from "grimoirejs-fundamental/ref/Components/TransformComponent";
 export default () => {
     GrimoireInterface.register(async () => {
         SceneComponent.onSceneDescriptionCreation((s: LightInfoSceneDesc) => {
@@ -40,6 +41,9 @@ export default () => {
                     colors: new VectorArrayContainer(3, 0),
                     params: new VectorArrayContainer(4, 0)
                 },
+                ambient: {
+                    color: [0, 0, 0]
+                },
                 shadowMap: {
                     shadowMapCountPerEdge: new Vector2(0, 0),
                     shadowMap: null,
@@ -50,19 +54,20 @@ export default () => {
             };
         });
         const g = GrimoireInterface;
-        g.registerComponent("ForwardShadingManager", ForwardShadingManager);
-        g.registerComponent("Light", LightComponent);
-        g.registerComponent("DirectionalLightType", DirectionalLightTypeComponent);
-        g.registerComponent("PointLightType", PointLightTypeComponent);
-        g.registerComponent("SpotLightType", SpotLightTypeComponent);
-        g.registerComponent("SceneLightManager", SceneLightManager);
-        g.registerComponent("ShadowMapCamera", ShadowMapCameraComponent);
-        g.registerComponent("RenderShadowMap", RenderShadowMapComponent);
-        g.registerComponent("SpotLightShadowMapCamera", SpotLightShadowMapCameraComponent);
-        g.overrideDeclaration("scene", ["SceneLightManager"]);
-        g.overrideDeclaration("render-scene", ["RenderShadowMap"]);
-        g.overrideDeclaration("goml",["ForwardShadingManager"]);
-        g.registerNode("light", ["Transform", "Light"]);
+        g.registerComponent(ForwardShadingManager);
+        g.registerComponent(LightComponent);
+        g.registerComponent(DirectionalLightTypeComponent);
+        g.registerComponent(PointLightTypeComponent);
+        g.registerComponent(SpotLightTypeComponent);
+        g.registerComponent(SceneLightManager);
+        g.registerComponent(ShadowMapCameraComponent);
+        g.registerComponent(RenderShadowMapComponent);
+        g.registerComponent(AmbientLightTypeComponent);
+        g.overrideDeclaration("scene", [SceneLightManager]);
+        g.overrideDeclaration("render-scene", [RenderShadowMapComponent]);
+        g.overrideDeclaration("goml", [ForwardShadingManager]);
+        g.overrideDeclaration("mesh", [], { material: "new(basic-shading)" })
+        g.registerNode("light", [TransformComponent, LightComponent]);
         LightVariableRegister.registerAll();
         GLExtRequestor.request("OES_texture_float");
     });
