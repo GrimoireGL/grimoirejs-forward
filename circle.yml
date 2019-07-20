@@ -1,9 +1,0 @@
-machine:
-  node:
-    version: 8.5.0
-test:
-  post:
-    - npm run semantic-release || true
-  override:
-    - npm run build && npm test
-    - sh ./common/e2e.sh
